@@ -39,8 +39,6 @@ How does he find it ?
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 
-(Not necessary and occurs request modification On the burp side, 
-without forcing system resources as 0x94tr does all operations..)
 
 
 <h4>Requirements:</h4><br>
