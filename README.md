@@ -21,7 +21,7 @@ What vulnerabilities can it find ?
 <li>Header CRLF Injection</li>
 <li>GET-POST Command Injection</li>
 <li>GET-POST Open Redirect</li>
-<li>GET-POST XSS </li>
+<li>GET-POST Cross-Site Scripting(XSS) </li>
 <li>GET-POST LDAP Injection </li>
 <li>GET-POST Xpath Injection </li>
 <li>GET-POST Frame Injection </li>
@@ -32,6 +32,7 @@ What vulnerabilities can it find ?
 <li>Blind Remote Command Injection</li>
 <li>Blind XPATH Injection</li>
 <li>Header(Cookie/UserAgent) Injection</li>
+<li>Expression Language Injection</li>
 </ul>
 
 How does he find it ?
