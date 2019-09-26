@@ -1,6 +1,16 @@
-# 0x94TR
-0x94TR Scanner Burp Suite Extension
+0x94TR Scanner Burp Suite Extension 
 
+============================================================================================================
+Operating mechanism and Features
+============================================================================================================
+Operating mechanism: Operations occur on a direct query without any parameter target input..
+
+Potential security weaknesses are reflected on The Burp screen, It has a payload list in itself,
+finds vulnerabilities by doing bruteforce.. 
+============================================================================================================
+Features: 
+
+What vulnerabilities can it find ?
 <ul>
 <li>GET-POST Error Based SQL Injection </li>
 <li>GET-POST Blind SQL Injection </li>
@@ -25,11 +35,18 @@
 <li>Blind Remote Command Injection</li>
 <li>Blind XPATH Injection</li>
 <li>Header(Cookie/UserAgent) Injection</li>
-
 </ul>
 
+How does he find it ?
 
-Requirements:<br>
+It automatically detects GET or POST requests,
+by browsing the target site and tries payload based on returning errors.
+
+(Not necessary and occurs request modification On the burp side, 
+without forcing system resources as 0x94tr does all operations..)
+
+
+<h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
 Manual installation:<br>
 'Extender'->'Options'<br>
