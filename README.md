@@ -1,7 +1,6 @@
 0x94TR Scanner Burp Suite Extension 
 
-Operating mechanism and Features
-Operating mechanism: Operations occur on a direct query without any parameter target input..
+Operations occur on a direct query without any parameter target input..
 
 Potential security weaknesses are reflected on The Burp screen, It has a payload list in itself,
 finds vulnerabilities by doing bruteforce.. 
@@ -31,7 +30,7 @@ What vulnerabilities can it find ?
 <li>Blind Command Injection</li>
 <li>Blind Remote Command Injection</li>
 <li>Blind XPATH Injection</li>
-<li>Header(Cookie/UserAgent) Injection</li>
+<li>Header(Cookie/UserAgent/Referer/Accept-Language/Accept-Encoding/Accept-Charset) Injection</li>
 <li>Expression Language Injection</li>
 </ul>
 
