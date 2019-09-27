@@ -32,6 +32,8 @@ What vulnerabilities can it find ?
 <li>Blind XPATH Injection</li>
 <li>Header(Cookie/UserAgent/Referer/Accept-Language/Accept-Encoding/Accept-Charset) Injection</li>
 <li>Expression Language Injection</li>
+<li>XXE Injection</li>
+
 </ul>
 
 How does he find it ?
