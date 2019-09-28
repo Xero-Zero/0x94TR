@@ -48,7 +48,7 @@ by browsing the target site and tries payload based on returning errors.
  Install<br>
  pip install -r requirements.txt</h4></b>
 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/setup.png>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
 
 <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
