@@ -1268,7 +1268,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
         injectionkod=["%0d%0a%20ScannerXXX%3aScannerXXX",
                               "%0d%0aContent-Type: text/html%0d%0aHTTP/1.1 200 OK%0d%0aContent-Type: text/html%0d%0a%0d%0a%3Chtml%3E%3Cfont color=red%3E0x94scanner%3C/font%3E%3C/html%3E",
-                      "%0d%0aLocation:%20http://www.google.com",
+                      "%0d%0aLocation:%20https://github.com/antichown/0x94TR/blob/master/remote_test.txt",
                       "%0d%0aScannerXXX%3aScannerXXX%3dScannerXXX~3",
                       "%0D%0aLocation: javascript:%0D%0A%0D%0A<script>alert(0x000123)</script>"]
 
@@ -1301,30 +1301,25 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
                 for x,y in r1.getheaders():
                     hinfo+=x+y
-                    if "0x94Scannerheader" in x or \
-                                           "ScannerXXX" in x or \
-                       "ScannerXXX:ScannerXXX" in y and\
-                       "0a" not in y:
-                        self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
+                    if "0x94Scannerheader" in x or "ScannerXXX" in x:
+                        self.ekle("GET", link, "New Line Header CRLF Injection", inj, crlfresponsek)
 
-                    if "google.com" in y and \
-                                           "0a" not in y:
+                    if "ScannerXXX:ScannerXXX" in y and "0a" not in y:
                         self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
-
 
 
                 if "0x000123" in crlfresponsek:
-                    self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
+                    self.ekle("GET",link,"Response Header CRLF Injection",inj, crlfresponsek)
 
 
                 if "Warning: Header may not contain" in crlfresponsek or \
                                    "header, new line detected" in crlfresponsek:
-                    self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
+                    self.ekle("GET",link,"New Line Header CRLF Injection",inj, crlfresponsek)
 
 
 
-                if "<title>Google</title>" in crlfresponsek:
-                    self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
+                if "4ed7c9f4b716d75bdca5b42975774e55" in crlfresponsek:
+                    self.ekle("GET",link,"Location Header CRLF Injection",inj, crlfresponsek)
 
 
                 elif "0x94scanner" in crlfresponsek and \
@@ -2219,7 +2214,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if "README.md" in y11.text:
-                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text:
+                                if "README.md%3E%3C%2Fiframe%3E" not in y11.text:
                                     self.ekle(method,url,"Frame Injection",str(new_param), rawdata)
 
 
@@ -2233,7 +2228,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if "README.md" in y11.text:
-                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text:
+                                if "README.md%3E%3C%2Fiframe%3E" not in y11.text:
                                     self.ekle(method,url,"Frame Injection",str(new_param), y11.text)
 
 
@@ -2640,25 +2635,29 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     parametredata = {}
 
                     if method == "POST" :
-                        httpService = messageInfo.getHttpService()
-                        request = messageInfo.getRequest()
-                        analyzedRequest = self._helpers.analyzeRequest(httpService, request)
-                        body = request[analyzedRequest.getBodyOffset():].tostring()
-                        if body!="":
-                            if "&" in body:
-                                body_split=body.split("&")
-                                parametredata = {}
-                                for param in body_split:
-                                    parametredata[param.split("=")[0]] = param.split("=")[1]
-                            else:
-                                parametredata = {}
-                                parametredata[body.split("=")[0]]=body.split("=")[1]
+                        try:
+                            httpService = messageInfo.getHttpService()
+                            request = messageInfo.getRequest()
+                            analyzedRequest = self._helpers.analyzeRequest(httpService, request)
+                            body = request[analyzedRequest.getBodyOffset():].tostring()
+                            if body!="":
+                                if "&" in body:
+                                    body_split=body.split("&")
+                                    parametredata = {}
+                                    for param in body_split:
+                                        parametredata[param.split("=")[0]] = param.split("=")[1]
+                                else:
+                                    parametredata = {}
 
-                            dout.println(url.toString() + " - " + method)
-                            dout.println(body)
-                            dout.println("------------------------------------------------------")
+                                    parametredata[body.split("=")[0]]=body.split("=")[1]
 
-                            self.form_starter(url.toString(),parametredata,method)
+                                dout.println(url.toString() + " - " + method)
+                                dout.println(body)
+                                dout.println("------------------------------------------------------")
+                                self.form_starter(url.toString(),parametredata,method)
+                        except:
+                            error="xxx"
+
 
 
 
