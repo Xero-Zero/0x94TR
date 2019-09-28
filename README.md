@@ -1,4 +1,4 @@
-0x94TR Scanner Burp Suite Extension 
+0x94TR Scanner Burp Suite Extension Python 2x
 
 Operations occur on a direct query without any parameter target input..
 
