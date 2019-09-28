@@ -33,6 +33,9 @@ What vulnerabilities can it find ?
 <li>Header(Cookie/UserAgent/Referer/Accept-Language/Accept-Encoding/Accept-Charset) Injection</li>
 <li>Expression Language Injection</li>
 <li>XXE Injection</li>
+<li>Directory Brute</li>
+<li>File Brute</li>
+<li>Default password Brute</li>
 
 </ul>
 
