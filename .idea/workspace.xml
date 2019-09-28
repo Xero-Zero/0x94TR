@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0cf0831c-cdfc-4d06-80fa-30d5eaede429" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/certifi/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/certifi/__main__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/certifi/cacert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/certifi/core.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/big5freq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/big5prober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/chardistribution.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/charsetgroupprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/charsetprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/cli/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/cli/chardetect.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/codingstatemachine.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/cp949prober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/enums.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/escprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/escsm.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/eucjpprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/euckrfreq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/euckrprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/euctwfreq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/euctwprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/gb2312freq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/gb2312prober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/hebrewprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/jisfreq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/jpcntx.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langbulgarianmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langcyrillicmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langgreekmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langhebrewmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langhungarianmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langthaimodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/langturkishmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/latin1prober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/mbcharsetprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/mbcsgroupprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/mbcssm.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/sbcharsetprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/sbcsgroupprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/sjisprober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/universaldetector.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/utf8prober.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chardet/version.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/codec.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/core.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/idnadata.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/intranges.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/package_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/idna/uts46data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/__version__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/_internal_utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/adapters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/certs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/cookies.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/help.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/hooks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/packages.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/sessions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/status_codes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/structures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requests/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/_collections.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/connectionpool.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/_securetransport/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/_securetransport/bindings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/_securetransport/low_level.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/appengine.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/ntlmpool.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/pyopenssl.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/securetransport.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/contrib/socks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/fields.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/filepost.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/backports/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/backports/makefile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/ordered_dict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/six.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/ssl_match_hostname/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/packages/ssl_match_hostname/_implementation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/poolmanager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/request.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/response.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/request.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/response.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/retry.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/selectors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/ssl_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/timeout.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/url.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/urllib3/util/wait.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xssfinder.py" beforeDir="false" afterPath="$PROJECT_DIR$/xssfinder.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python3.7/site-packages/chardet/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chardet/cli/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/requests/certs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="10" lean-forward="true" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Library/Python/3.7/lib/python/site-packages/certifi/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/certifi/core.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/requests/packages.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/idna/core.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/chardet/sbcsgroupprober.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="155">
+              <caret line="56" column="14" selection-start-line="56" selection-start-column="14" selection-end-line="56" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python3.7/site-packages/urllib3/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/urllib3/util/url.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/lib/check.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/xssfinder.py" />
+        <option value="$PROJECT_DIR$/utils/check.py" />
+        <option value="$PROJECT_DIR$/requests/packages.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="y" value="23" />
+    <option name="width" value="1280" />
+    <option name="height" value="777" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="xssfinder" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xssfinder" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/utils/__init__.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0cf0831c-cdfc-4d06-80fa-30d5eaede429" name="Default Changelist" comment="" />
+      <created>1560571780293</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1560571780293</updated>
+      <workItem from="1560571782019" duration="100000" />
+      <workItem from="1560571898416" duration="9816000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="9916000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2536349" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.32876712" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32876712" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32956383" />
+      <window_info anchor="right" id="Database" order="4" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../Json2Dict.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="90">
+            <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2019.1/python_stubs/-1199943126/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="803" column="8" selection-start-line="803" selection-start-column="8" selection-end-line="803" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xssfinder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="68" column="46" selection-start-line="68" selection-start-column="46" selection-end-line="68" selection-end-column="46" />
+          <folding>
+            <element signature="e#17#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requests/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Python/3.7/lib/python/site-packages/requests/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1435" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/urllib3/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/urllib3/util/url.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chardet-3.0.4.dist-info/WHEEL">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requests/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/chardet/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chardet/cli/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requests/certs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="10" lean-forward="true" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Python/3.7/lib/python/site-packages/certifi/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/certifi/core.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/idna/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requests/packages.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/idna/core.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chardet/sbcsgroupprober.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="56" column="14" selection-start-line="56" selection-start-column="14" selection-end-line="56" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
