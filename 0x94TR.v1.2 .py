@@ -1304,9 +1304,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     if "0x94Scannerheader" in x or "ScannerXXX" in x:
                         self.ekle("GET", link, "New Line Header CRLF Injection", inj, crlfresponsek)
 
-                    if "ScannerXXX:ScannerXXX" in y and "0a" not in y:
-                        self.ekle("GET",link,"Header CRLF Injection",inj, crlfresponsek)
-
 
                 if "0x000123" in crlfresponsek:
                     self.ekle("GET",link,"Response Header CRLF Injection",inj, crlfresponsek)
