@@ -40,8 +40,8 @@ How does he find it ?
 
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
-
-
+<br>
+<b><h4>pip install -r requirements.txt</h4></b>
 
 <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
@@ -56,6 +56,11 @@ Choose 0x94TR.py<br>
 Done!<br>
 
 <br>
+
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
+
+ 
+
 watch the video<br>
 
 [![0x94TR Burp Suite Extension](http://img.youtube.com/vi/HWMUSTBVovk/0.jpg)](http://www.youtube.com/watch?v=HWMUSTBVovk "0x94TR Burp Suite Extension")
