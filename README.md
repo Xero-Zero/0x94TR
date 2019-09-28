@@ -45,9 +45,8 @@ It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
 <b><h4>
- Install<br>
- pip install -r requirements.txt</h4></b>
-
+ Setup</h4><br>
+ 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
 
 <h4>Requirements:</h4><br>
