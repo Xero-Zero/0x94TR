@@ -41,7 +41,9 @@ How does he find it ?
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
-<b><h4>pip install -r requirements.txt</h4></b>
+<b><h4>
+ Install<br>
+ pip install -r requirements.txt</h4></b>
 
 <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
