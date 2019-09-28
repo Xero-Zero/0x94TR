@@ -36,7 +36,7 @@ What vulnerabilities can it find ?
 <li>Directory Brute</li>
 <li>File Brute</li>
 <li>Default password Brute</li>
-
+<li>Sef Url Xss </li>
 </ul>
 
 How does he find it ?
