@@ -49,7 +49,7 @@ by browsing the target site and tries payload based on returning errors.
  
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
 <br>
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.png>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
 <br>
 <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
