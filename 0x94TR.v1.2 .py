@@ -2366,7 +2366,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                                 dictlogin = params.copy()
 
                             if len(loginnormal) != len(brutekaynak):
-                                self.ekle("LOGIN", url, "Brute Force", url + "\nLogin Data=" + loginsaf, brutekaynak)
+                                self.ekle("LOGIN", url, "Brute Force User:"+gelenuser.strip(), url + "\nLogin Data=" + loginsaf, brutekaynak)
                 except:
                     mesaj = "ddd"
                     # yaz(mesaj)

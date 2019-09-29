@@ -19,6 +19,7 @@ administrator
 1234567
 root
 toor
+test
 pass123
 pass1
 pass2
