@@ -1254,7 +1254,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     conn.putheader('Accept-Language', 'en-us,en;q=0.5' + inj)
                     conn.putheader('Accept-Encoding', 'gzip, deflate' + inj)
                     conn.putheader('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7' + inj)
-                    conn.putheader('Connection', 'keep-alive' + inj)
                     conn.endheaders()
                     r1 = conn.getresponse()
                     crlfresponsek = r1.read()
@@ -2281,169 +2280,98 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     postgetdict = params.copy()
 
 
-
-    def loginbrute(self,url,params,method):
-
-
-
-        yakala={}
-        yakala=params.copy()
+    def loginbrute(self, url, params, method):
+        yakala = {}
+        yakala = params.copy()
+        loginnormal=""
+        brutekaynak=""
+        dictlogin = {}
 
         if yakala.has_key("user") or \
-                   yakala.has_key("username") or \
-           yakala.has_key("userinput") or \
-           yakala.has_key("usr") or \
-           yakala.has_key("uname") or \
-           yakala.has_key("id") or \
-          yakala.has_key("usernameinput") or \
-         yakala.has_key("pass") or \
-         yakala.has_key("passwd") or \
-           yakala.has_key("password") or \
-        yakala.has_key("passwdinput") or \
-        yakala.has_key("passwordinput") or \
-        yakala.has_key("uid") or \
-        yakala.has_key("pwd"):
+                yakala.has_key("username") or \
+                yakala.has_key("userinput") or \
+                yakala.has_key("usr") or \
+                yakala.has_key("uname") or \
+                yakala.has_key("id") or \
+                yakala.has_key("usernameinput") or \
+                yakala.has_key("pass") or \
+                yakala.has_key("passwd") or \
+                yakala.has_key("password") or \
+                yakala.has_key("passwdinput") or \
+                yakala.has_key("passwordinput") or \
+                yakala.has_key("uid") or \
+                yakala.has_key("pwd"):
 
-            loginler=["test",
-                      "'or''='",
-                     "admin",
-                     "secret",
-                     "guest",
-                     "1234",
-                     "123456",
-                     "demo123",
-                     "demo",
-                     "password123",
-                     "password1",
-                     "qwerty",
-                     "abc123",
-                     "password1",
-                     "administrator",
-                     "12341234",
-                     "111111",
-                     "123456789",
-                     "12345678",
-                     "1234567",
-                     "root",
-                     "toor",
-                     "pass123",
-                     "pass1",
-                     "pass2",
-                     "pass",
-                     "password2",
-                     "123123",
-                     "admin123",
-                     "123admin",
-                     "'or''='"]
+            passlar=open("dict/pass.txt").readlines()
+            userlar=open("dict/user.txt").readlines()
 
-            
-
-           
-            
-            passlar=["test",
-                     "admin",
-                     "secret",
-                     "guest",
-                     "1234",
-                     "123456",
-                     "demo123",
-                     "demo",
-                     "password123",
-                     "password1",
-                     "qwerty",
-                     "abc123",
-                     "password1",
-                     "administrator",
-                     "12341234",
-                     "111111",
-                     "123456789",
-                     "12345678",
-                     "1234567",
-                     "root",
-                     "toor",
-                     "pass123",
-                     "pass1",
-                     "pass2",
-                     "pass",
-                     "password2",
-                     "123123",
-                     "admin123",
-                     "123admin",
-                     "'or''='"]
-
-
-            dictb1={}
-            dictb1=params.copy()
-            for key,value in params.items():
+            dictb1 = {}
+            dictb1 = params.copy()
+            for key, value in params.items():
 
                 try:
                     if key in dictb1:
                         for x in passlar:
-                            if key.lower()=="user" or \
-                                                           key.lower()=="pass" or \
-                               key.lower()=="username" or \
-                               key.lower()=="password" or \
-                               key.lower()=="passwd" or \
-                               key.lower()=="userinput" or \
-                         key.lower()=="uname" or \
-                   key.lower()=="uid" or \
-                   key.lower()=="id":
-                                dictb1[key]="0x94"
+                            if key.lower() == "user" or \
+                                    key.lower() == "pass" or \
+                                    key.lower() == "username" or \
+                                    key.lower() == "password" or \
+                                    key.lower() == "passwd" or \
+                                    key.lower() == "userinput" or \
+                                    key.lower() == "uname" or \
+                                    key.lower() == "uid" or \
+                                    key.lower() == "id":
+                                dictb1[key] = "0x94"
 
-                    if method=="GET":
-                        loginnormal = session.get(url+"?"+dictb1).text
+                    parametrebrute1 = urllib.urlencode(dictb1)
+                    if method == "GET":
+                        loginnormal = self.temizle(urlopen(url + "?" + parametrebrute1).read())
 
                     else:
-                        loginnormal = session.post(url, dictb1).text
 
+                        loginnormal = self.temizle(urlopen(url, parametrebrute1).read())
 
-                    for gelenuser in loginler:
-                        dictlogin={}
-                        dictlogin=params.copy()
+                    for gelenuser in userlar:
+                        dictlogin = {}
+                        dictlogin = params.copy()
                         for gelenpass in passlar:
-                            for key,value in params.items():
+                            for key, value in params.items():
                                 if key in dictlogin:
-                                    if key.lower()=="user" or \
-                                       key.lower()=="usr" or \
-                                       key.lower()=="username" or \
-                                       key.lower()=="userinput" or \
-                                       key.lower()=="usernameinput" or \
-                                       key.lower()=="uname" or \
-                               key.lower()=="id":
-                                        dictlogin[key]=gelenuser
+                                    if key.lower() == "user" or \
+                                            key.lower() == "usr" or \
+                                            key.lower() == "username" or \
+                                            key.lower() == "userinput" or \
+                                            key.lower() == "usernameinput" or \
+                                            key.lower() == "uname" or \
+                                            key.lower() == "id":
+                                        dictlogin[key] = gelenuser.strip()
 
-                                    if key.lower()=="pass" or \
-                                       key.lower()=="password" or \
-                                       key.lower()=="passwd" or \
-                                       key.lower()=="passinput" or \
-                                       key.lower()=="passwordinput" or \
-                                       key.lower()=="pwd":
-                                        dictlogin[key]=gelenpass
-                            new_param = {}
-                            new_param = dictlogin.copy()
-                            if method=="GET":
-                                brutekaynak = session.get(url+"?"+dictlogin).text
+                                    if key.lower() == "pass" or \
+                                            key.lower() == "password" or \
+                                            key.lower() == "passwd" or \
+                                            key.lower() == "passinput" or \
+                                            key.lower() == "passwordinput" or \
+                                            key.lower() == "pwd":
+                                        dictlogin[key] = gelenpass.strip()
+
+                            loginsaf = urllib.urlencode(dictlogin)
+                            if method == "GET":
+                                brutekaynak = self.temizle(urlopen(url + "?" + loginsaf).read())
                                 dictlogin.clear()
-                                dictlogin=params.copy()
+                                dictlogin = params.copy()
 
                             else:
-                                brutekaynak = session.post(url, dictlogin).text
+                                brutekaynak = self.temizle(urlopen(url, loginsaf).read())
                                 dictlogin.clear()
-                                dictlogin=params.copy()
+                                dictlogin = params.copy()
 
-
-                            if len(loginnormal)!=len(brutekaynak):
-
-                                self.ekle("LOGIN",url,"Brute Force",url+"\nLogin Data="+str(new_param), brutekaynak)
+                            if len(loginnormal) != len(brutekaynak):
+                                self.ekle("LOGIN", url, "Brute Force", url + "\nLogin Data=" + loginsaf, brutekaynak)
                 except:
-                    mesaj="ddd"
-                    #yaz(mesaj)
+                    mesaj = "ddd"
+                    # yaz(mesaj)
                 dictlogin.clear()
                 dictlogin = params.copy()
-
-
-
-
 
     def tetikle(self,formurl,toplamveri,method):
 
@@ -2596,7 +2524,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
         global taranan
         global session
-
+        #toolFlag == IBurpExtenderCallbacks.TOOL_SCANNER | |
+        #toolFlag == IBurpExtenderCallbacks.TOOL_REPEATER | |
+        #toolFlag == IBurpExtenderCallbacks.TOOL_INTRUDER
         if toolFlag == 4 or toolFlag == 16 or toolFlag == 8:
 
             dahildegil = (".doc",".tar",".gz",".msi",".flv",".swf",".pkg",".xlsx",".js",".xml",".ico",".css",".gif",".jpg",".jar",".tif",".bmp",".war",".ear",".mpg",".wmv",".mpeg",".scm",".iso",".dmp",".dll",".cab",".so",".avi",".bin",".exe",".iso",".tar",".png",".pdf",".ps",".mp3",".zip",".rar",".gz")
@@ -2642,15 +2572,23 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                                     body_split=body.split("&")
                                     parametredata = {}
                                     for param in body_split:
-                                        parametredata[param.split("=")[0]] = param.split("=")[1]
+                                        plode=param.split("=")
+                                        if plode[1]!="":
+                                            parametredata[plode[0]] = plode[1]
+                                        else:
+                                            parametredata[plode[0]] = "0x94"
                                 else:
                                     parametredata = {}
+                                    plode = body.split("=")
+                                    if plode[1] != "":
+                                        parametredata[plode[0]]=plode[1]
+                                    else:
+                                        parametredata[plode[0]]="0x94"
 
-                                    parametredata[body.split("=")[0]]=body.split("=")[1]
 
-                                dout.println(url.toString() + " - " + method)
-                                dout.println(body)
-                                dout.println("------------------------------------------------------")
+                                #dout.println(url.toString() + " - " + method)
+                                #dout.println(body)
+                                #dout.println("------------------------------------------------------")
                                 self.form_starter(url.toString(),parametredata,method)
                         except:
                             error="xxx"
