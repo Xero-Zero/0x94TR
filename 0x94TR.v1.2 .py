@@ -1982,7 +1982,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                     except:
                         mesaj="dd"
 
-                    self.hatakontrol(method,url, rawdata, url + " XSS")
+                    self.hatakontrol(method,url, xsspostresponse.text, url + " XSS")
                     postgetdict.clear()
                     postgetdict = params.copy()
 
