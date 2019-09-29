@@ -48,7 +48,9 @@ by browsing the target site and tries payload based on returning errors.
  Setup</h4><br>
  
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
-
+<br>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.png>
+<br>
 <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
 Manual installation:<br>

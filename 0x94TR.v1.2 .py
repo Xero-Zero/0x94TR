@@ -2527,107 +2527,110 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         #toolFlag == IBurpExtenderCallbacks.TOOL_SCANNER | |
         #toolFlag == IBurpExtenderCallbacks.TOOL_REPEATER | |
         #toolFlag == IBurpExtenderCallbacks.TOOL_INTRUDER
-        if toolFlag == 4 or toolFlag == 16 or toolFlag == 8:
 
-            dahildegil = (".doc",".tar",".gz",".msi",".flv",".swf",".pkg",".xlsx",".js",".xml",".ico",".css",".gif",".jpg",".jar",".tif",".bmp",".war",".ear",".mpg",".wmv",".mpeg",".scm",".iso",".dmp",".dll",".cab",".so",".avi",".bin",".exe",".iso",".tar",".png",".pdf",".ps",".mp3",".zip",".rar",".gz")
-            # only process requests
-            if messageIsRequest:
-                pass
-            else:
-                url=self._helpers.analyzeRequest(messageInfo).getUrl()
-                path = urlparse.urlparse(url.toString()).path
-                ext = os.path.splitext(path)[1]
+        if self._callbacks.isInScope(self._helpers.analyzeRequest(messageInfo).getUrl()):
 
-                if ext not in dahildegil:
+            if toolFlag == 4 or toolFlag == 16 or toolFlag == 8:
 
-                    #response = messageInfo.getResponse() #get Response from IHttpRequestResponse instance
-                    #analyzedResponse = self._helpers.analyzeResponse(response)
-                    #headerList = analyzedResponse.getHeaders() arrraydir
+                dahildegil = (".doc",".tar",".gz",".msi",".flv",".swf",".pkg",".xlsx",".js",".xml",".ico",".css",".gif",".jpg",".jar",".tif",".bmp",".war",".ear",".mpg",".wmv",".mpeg",".scm",".iso",".dmp",".dll",".cab",".so",".avi",".bin",".exe",".iso",".tar",".png",".pdf",".ps",".mp3",".zip",".rar",".gz")
+                # only process requests
+                if messageIsRequest:
+                    pass
+                else:
+                    url=self._helpers.analyzeRequest(messageInfo).getUrl()
+                    path = urlparse.urlparse(url.toString()).path
+                    ext = os.path.splitext(path)[1]
+
+                    if ext not in dahildegil:
+
+                        #response = messageInfo.getResponse() #get Response from IHttpRequestResponse instance
+                        #analyzedResponse = self._helpers.analyzeResponse(response)
+                        #headerList = analyzedResponse.getHeaders() arrraydir
 
 
 
 
-                    #if ext in dahildegil:
+                        #if ext in dahildegil:
 
-                    resquest = messageInfo.getRequest()
-                    analyzedRequest = self._helpers.analyzeRequest(resquest)
-                    request_header = analyzedRequest.getHeaders()
+                        resquest = messageInfo.getRequest()
+                        analyzedRequest = self._helpers.analyzeRequest(resquest)
+                        request_header = analyzedRequest.getHeaders()
 
-                    response = messageInfo.getResponse()  # get Response from IHttpRequestResponse instance
-                    analyzedResponse = self._helpers.analyzeResponse(response)
-                    headerList = analyzedResponse.getHeaders()
+                        response = messageInfo.getResponse()  # get Response from IHttpRequestResponse instance
+                        analyzedResponse = self._helpers.analyzeResponse(response)
+                        headerList = analyzedResponse.getHeaders()
 
-                    method = analyzedRequest.getMethod()
-                    #dout.println(url.toString()+" - "+method)
-                    parametredata = {}
+                        method = analyzedRequest.getMethod()
+                        #dout.println(url.toString()+" - "+method)
+                        parametredata = {}
 
-                    if method == "POST" :
-                        try:
-                            httpService = messageInfo.getHttpService()
-                            request = messageInfo.getRequest()
-                            analyzedRequest = self._helpers.analyzeRequest(httpService, request)
-                            body = request[analyzedRequest.getBodyOffset():].tostring()
-                            if body!="":
-                                if "&" in body:
-                                    body_split=body.split("&")
-                                    parametredata = {}
-                                    for param in body_split:
-                                        plode=param.split("=")
-                                        if plode[1]!="":
-                                            parametredata[plode[0]] = plode[1]
-                                        else:
-                                            parametredata[plode[0]] = "0x94"
-                                else:
-                                    parametredata = {}
-                                    plode = body.split("=")
-                                    if plode[1] != "":
-                                        parametredata[plode[0]]=plode[1]
+                        if method == "POST" :
+                            try:
+                                httpService = messageInfo.getHttpService()
+                                request = messageInfo.getRequest()
+                                analyzedRequest = self._helpers.analyzeRequest(httpService, request)
+                                body = request[analyzedRequest.getBodyOffset():].tostring()
+                                if body!="":
+                                    if "&" in body:
+                                        body_split=body.split("&")
+                                        parametredata = {}
+                                        for param in body_split:
+                                            plode=param.split("=")
+                                            if plode[1]!="":
+                                                parametredata[plode[0]] = plode[1]
+                                            else:
+                                                parametredata[plode[0]] = "0x94"
                                     else:
-                                        parametredata[plode[0]]="0x94"
+                                        parametredata = {}
+                                        plode = body.split("=")
+                                        if plode[1] != "":
+                                            parametredata[plode[0]]=plode[1]
+                                        else:
+                                            parametredata[plode[0]]="0x94"
 
 
-                                #dout.println(url.toString() + " - " + method)
-                                #dout.println(body)
-                                #dout.println("------------------------------------------------------")
-                                self.form_starter(url.toString(),parametredata,method)
-                        except:
-                            error="xxx"
-
-
-
-
-
-
-
-
-                     #for header in request_header:
-                     #           if header.startswith("Cookie: "):
-                      #              #dout.println("cookiem="+header)
-                       #             splitHeader = header.split(":", 2)
-                        #            headersm = {'Cookie': splitHeader[1].strip()}
-                         #           session.headers.update(headersm)
+                                    #dout.println(url.toString() + " - " + method)
+                                    #dout.println(body)
+                                    #dout.println("------------------------------------------------------")
+                                    self.form_starter(url.toString(),parametredata,method)
+                            except:
+                                error="xxx"
 
 
 
-                    for header in request_header:
-                       if header.startswith("Cookie: "):
-                            splitHeader = header.split(":", 2)
-                            headersm = {'Cookie': splitHeader[1].strip()}
-                            session.headers.update(headersm)
-                       elif header.startswith("Referer: "):
-                           splitHeader2 = header.split(":", 2)
-                           headersm2 = {'Referer': splitHeader2[1].strip()}
-                           session.headers.update(headersm2)
 
 
-                            #session.headers['Cookie'] = splitHeader[1]
-                            #session.headers.update({"Cookie":header.replace(header.split(':')[0]+":","")})
 
-                            #self.table_add("XXX",url,"xx","xx","xxx")
 
-                    if not taranan.has_key(url):
-                        taranan[url] = "0x94"
-                        self.starter(url.toString())
+
+                         #for header in request_header:
+                         #           if header.startswith("Cookie: "):
+                          #              #dout.println("cookiem="+header)
+                           #             splitHeader = header.split(":", 2)
+                            #            headersm = {'Cookie': splitHeader[1].strip()}
+                             #           session.headers.update(headersm)
+
+
+
+                        for header in request_header:
+                           if header.startswith("Cookie: "):
+                                splitHeader = header.split(":", 2)
+                                headersm = {'Cookie': splitHeader[1].strip()}
+                                session.headers.update(headersm)
+                           elif header.startswith("Referer: "):
+                               splitHeader2 = header.split(":", 2)
+                               headersm2 = {'Referer': splitHeader2[1].strip()}
+                               session.headers.update(headersm2)
+
+
+                                #session.headers['Cookie'] = splitHeader[1]
+                                #session.headers.update({"Cookie":header.replace(header.split(':')[0]+":","")})
+
+                                #self.table_add("XXX",url,"xx","xx","xxx")
+
+                        if not taranan.has_key(url):
+                            taranan[url] = "0x94"
+                            self.starter(url.toString())
 
         return
 
