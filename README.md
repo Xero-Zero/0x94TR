@@ -48,12 +48,7 @@ by browsing the target site and tries payload based on returning errors.
 <br>
 <b>
 # Setup
- 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
-<br>
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
-<br>
-<h4>Requirements:</h4><br>
+ <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
 Manual installation:<br>
 'Extender'->'Options'<br>
@@ -64,11 +59,21 @@ Click 'Add'<br>
 Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
+<br>
+
+# Usage
+
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
+<br>
+
 
 <br>
 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/xxe.png>
 <br>
+
+
 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
 
