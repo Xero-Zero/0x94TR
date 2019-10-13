@@ -46,8 +46,7 @@ What vulnerabilities can it find ?
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
-<b>
-# Setup
+# Setup1 
  <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
 Manual installation:<br>
@@ -59,6 +58,8 @@ Click 'Add'<br>
 Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
+ 
+ # Setup2 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
 <br>
 
