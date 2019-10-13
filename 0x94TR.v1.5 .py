@@ -294,6 +294,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    "/dana-na/",
 	    "/autodiscover/autodiscover.xml",
 	    "/cf_scripts/",
+	    "/Providers/HtmlEditorProviders/Telerik/Telerik.Web.UI.DialogHandler.aspx",
 	    "/Microsoft-Server-ActiveSync/"]
 
 	source404=self.page404(dizin)
@@ -350,6 +351,502 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		mesaj = "error"
 
 
+
+    def hatakontrol(self,method,url,response,urlnormal):
+    
+    
+	if re.search("DEBUG = True in your Django settings file",response,re.DOTALL):
+	    mesaj= "[#] %s Django Config" % urlnormal
+	    self.ekle(method,url,"Django Config error", "",response)
+    
+	if re.search("SQLServer JDBC Driver", response, re.DOTALL):
+	    mesaj = "[#] %s MSSQL Error" % urlnormal
+	    self.ekle(method, url, "MSSQL error", "", response)
+    
+	if re.search("SybSQLException", response, re.DOTALL):
+	    mesaj = "[#] %s SybSQL Error" % urlnormal
+	    self.ekle(method, url, "SybSQL error", "", response)
+    
+	if re.search("valid PostgreSQL result", response, re.DOTALL):
+	    mesaj = "[#] %s valid PostgreSQL result" % urlnormal
+	    self.ekle(method, url, "PostgreSQL error", "", response)
+    
+    
+	if re.search("vSQLite/JDBCDriver", response, re.DOTALL):
+	    mesaj = "[#] %s SQLite/JDBCDriver" % urlnormal
+	    self.ekle(method, url, "SQLite error", "", response)
+    
+	if re.search("PSQLException", response, re.DOTALL):
+	    mesaj = "[#] %s PSQLException" % urlnormal
+	    self.ekle(method, url, "PostgreSQL error", "", response)
+    
+	if re.search("Informix ODBC Driver", response, re.DOTALL):
+	    mesaj = "[#] %s Informix Error" % urlnormal
+	    self.ekle(method, url, "Informix error", "", response)
+    
+	if re.search("System.Xml.XPath.XPathException",response,re.DOTALL):
+	    mesaj = "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method, url, "Xpath error", "", response)
+    
+	if re.search("xmlXPathEval: evaluation failed",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("SimpleXMLElement::xpath()",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("XPathException",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("MS.Internal.Xml.",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("XPathException",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Unknown error in XPath",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("org.apache.xpath.XPath",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("A closing bracket expected in",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("An operand in Union Expression does not produce a node-set",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Cannot convert expression to a number",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Document Axis does not allow any context Location Steps",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Empty Path Expression",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Empty Relative Location Path",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Empty Union Expression",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Expected '\)' in",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Expected node test or name specification after axis operator",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Incompatible XPath key",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Incorrect Variable Binding",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("libxml2 library function failed",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("XPathException",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("xmlsec library function",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("error '80004005'",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("A document must contain exactly one root element.",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Expression must evaluate to a node-set.",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("Expected token '\]'",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("<p>msxml4.dll</font>",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("<p>msxml3.dll</font>",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("4005 Notes error: Query is not understandable",response,re.DOTALL):
+	    mesaj= "[#] %s Xpath Error" % urlnormal
+	    self.ekle(method,url,"Xpath error", "",response)
+    
+	if re.search("DB2 SQL error:",response,re.DOTALL):
+	    mesaj= "[#] %s DB2 ERROR " % urlnormal
+	    self.ekle(method,url,"Db2 error", "",response)
+    
+	if re.search("supplied argument is not a valid ldap",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("javax.naming.NameNotFoundException",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("LDAPException",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Search: Bad search filter",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Protocol error occurred",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Size limit has exceeded",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("An inappropriate matching occurred",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("A constraint violation occurred",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The syntax is invalid",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Object does not exist",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The alias is invalid",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The distinguished name has an invalid syntax",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The server does not handle directory requests",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("There was a naming violation",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("There was an object class violation",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Results returned are too large",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Unknown error occurred",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("Local error occurred",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The search filter is incorrect",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The search filter is invalid",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("The search filter cannot be recognized",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+    
+	if re.search("Invalid DN syntax",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+    
+	if re.search("No Such Object",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+	if re.search("IPWorksASP.LDAP",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+    
+	if re.search("Module Products.LDAPMultiPlugins",response,re.DOTALL):
+	    mesaj= "[#] %s LDAP ERROR " % urlnormal
+	    self.ekle(method,url,"LDAP error", "",response)
+    
+    
+	if re.search("eval()'d code</b> on line <b>",response,re.DOTALL):
+	    mesaj= "[#] %s PHP eval hatasi " % urlnormal
+	    self.ekle(method,url,"Php Eval error", "",response)
+    
+	if re.search("Cannot execute a blank command in",response,re.DOTALL):
+	    mesaj= "[#] %s exec hatasi " % urlnormal
+	    self.ekle(method,url,"Exec error", "",response)
+    
+	if re.search("Fatal error</b>:  preg_replace",response,re.DOTALL):
+	    mesaj= "[#] %s Ppreg_replace hatasi " % urlnormal
+	    self.ekle(method,url,"preg_replace error", "",response)
+    
+    
+	if re.search("Microsoft OLE DB Provider for SQL Server",response,re.DOTALL):
+	    mesaj= "[#] %s MS-SQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Syntax error in string in query",response,re.DOTALL):
+	    mesaj= "[#] %s SQL error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Conversion failed when converting the nvarchar",response,re.DOTALL):
+	    mesaj= "[#] %s MSSQL error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("\[Microsoft\]\[ODBC Microsoft Access Driver\] Syntax error",response,re.DOTALL):
+	    mesaj= "[#] %s MS-Access error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Microsoft OLE DB Provider for ODBC Drivers.*\[Microsoft\]\[ODBC SQL Server Driver\]",response,re.DOTALL):
+	    mesaj= "[#] %s MS-SQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Microsoft OLE DB Provider for ODBC Drivers.*\[Microsoft\]\[ODBC Access Driver\]",response,re.DOTALL):
+	    mesaj= "[#] %s MS-Access error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Microsoft JET Database Engine",response,re.DOTALL):
+	    mesaj= "[#] %s MS Jet database engine error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("ADODB.Command.*error",response,re.DOTALL):
+	    mesaj= "[#] %s ADODB Error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Microsoft VBScript runtime",response,re.DOTALL):
+	    mesaj= "[#] %s VBScript runtime error" % urlnormal
+	    self.ekle(method,url,"VBSCRIPT  error", "",response)
+    
+	if re.search("Type mismatch",response,re.DOTALL):
+	    mesaj= "[#] %s VBScript / ASP error" % urlnormal
+	    self.ekle(method,url,"VBSCRIPT error", "",response)
+    
+	if re.search("Server Error.*System\.Data\.OleDb\.OleDbException",response,re.DOTALL):
+	    mesaj= "[#] %s ASP .NET OLEDB Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Invalid SQL statement or JDBC",response,re.DOTALL):
+	    mesaj= "[#] %s Apache Tomcat JDBC error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("mysql_fetch_array() expects parameter",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("XML parser error",response,re.DOTALL):
+	    mesaj= "[#] %s XML Error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Warning: mysql_fetch_array",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Warning.*supplied argument is not a valid MySQL result",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("You have an error in your SQL syntax.*on line",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("You have an error in your SQL syntax.*at line",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Warning.*mysql_.*\(\)",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("ORA-[0-9][0-9][0-9][0-9]",response,re.DOTALL):
+	    mesaj= "[#] %s Oracle DB Server error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("DorisDuke error",response,re.DOTALL):
+	    mesaj= "[#] %s DorisDuke error\n" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("javax\.servlet\.ServletException",response,re.DOTALL):
+	    mesaj= "[#] %s Java Servlet error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("org\.apache\.jasper\.JasperException",response,re.DOTALL):
+	    mesaj= "[#] %s Apache Tomcat error" % urlnormal
+	    self.ekle(method,url,"Tomcat error", "",response)
+    
+	if re.search("Warning.*failed to open stream",response,re.DOTALL):
+	    mesaj= "[#] %s PHP error" % urlnormal
+	    self.ekle(method,url,"PHP error", "",response)
+    
+	if re.search("Fatal Error.*on line",response,re.DOTALL):
+	    mesaj= "[#] %s PHP error" % urlnormal
+	    self.ekle(method,url,"PHP error", "",response)
+    
+	if re.search("Warning: mysql_num_rows():",response,re.DOTALL):
+	    mesaj= "[#] %s MYSQL ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Unclosed quotation mark",response,re.DOTALL):
+	    mesaj= "[#] %s MSSQL ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("java.sql.SQLException",response,re.DOTALL):
+	    mesaj= "[#] %s Java SQL ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("SqlClient.SqlException",response,re.DOTALL):
+	    mesaj= "[#] %s SqlClient ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Incorrect syntax near",response,re.DOTALL):
+	    mesaj= "[#] %s SQL ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("PostgreSQL query failed",response,re.DOTALL):
+	    mesaj= "[#] %s PostgreSQL ERROR " % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("500 - Internal server error",response,re.DOTALL):
+	    mesaj= "[#] %s Internal server error " % urlnormal
+	    self.ekle(method,url,"Server error", "",response)
+    
+	if re.search("Unclosed quotation mark",response,re.DOTALL):
+	    mesaj= "[#] %s MSSQL ERROR" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("java.sql.SQLException",response,re.DOTALL):
+	    mesaj= "[#] %s Java Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("valid PostgreSQL result",response,re.DOTALL):
+	    mesaj= "[#] %s PostgreSQL Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Oracle.*Driver",response,re.DOTALL):
+	    mesaj= "[#] %s PostgreSQL Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Procedure '[^']+' requires parameter '[^']+'",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Sybase message:",response,re.DOTALL):
+	    mesaj= "[#] %s Sybase Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Column count doesn't match:",response,re.DOTALL):
+	    mesaj= "[#] %s MySQL Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Dynamic Page Generation Error:",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("<b>Warning<b>: ibase_",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Dynamic SQL Error",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("\[Macromedia\]\[SQLServer JDBC Driver\]",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("An illegal character has been found in the statement",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("A Parser Error \(syntax error\)",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("where clause",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("PostgreSQL.*ERROR",response,re.DOTALL):
+	    mesaj= "[#] %s PostgreSQL Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("CLI Driver.*DB2",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Exception.*Informix",response,re.DOTALL):
+	    mesaj= "[#] %s Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("SQLite/JDBCDriver",response,re.DOTALL):
+	    mesaj= "[#] %s SQLite Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("SQLite\.Exception",response,re.DOTALL):
+	    mesaj= "[#] %s SQLite Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("(PLS|ORA)-[0-9][0-9][0-9][0-9]",response,re.DOTALL):
+	    mesaj= "[#] %s Oracle Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("Warning: mysql_connect()",response,re.DOTALL):
+	    mesaj= "[#] %s Mysql Connect Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("mysql_connect(): Access denied",response,re.DOTALL):
+	    mesaj= "[#] %s Mysql Connect Exception" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("fpassthru() expects ",response,re.DOTALL):
+	    mesaj= "[#] %s PHP fpassthru Exception" % urlnormal
+	    self.ekle(method,url,"PHP fpassthru error", "",response)
+    
+    
+	if re.search("Query timeout expired ",response,re.DOTALL):
+	    mesaj= "[#] %s MSSQL Time Based Error" % urlnormal
+	    self.ekle(method,url,"SQL error", "",response)
+	    
+	    
     def normalac(self,url):
 
 
@@ -1645,7 +2142,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    if key in dictb1:
 			for x in passlar:
 			    if key.lower() == "user" or \
-							   key.lower() == "pass" or \
+			       key.lower() == "pass" or \
 			       key.lower() == "username" or \
 			       key.lower() == "password" or \
 				    key.lower() == "passwd" or \
@@ -1657,11 +2154,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 		    parametrebrute1 = urllib.urlencode(dictb1)
 		    if method == "GET":
-			loginnormal = urlopen(url + "?" + params).read()
+			loginnormal = urlopen(url + "?" + parametrebrute1).read()
 
 		    else:
 
-			loginnormal = urlopen(url, params).read()
+			loginnormal = urlopen(url, parametrebrute1).read()
 
 		    for gelenuser in userlar:
 			dictlogin = {}
@@ -1696,6 +2193,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 				brutekaynak = urlopen(url, loginsaf).read()
 				dictlogin.clear()
 				dictlogin = params.copy()
+				
+			    self.hatakontrol("Login Brute Error", url, brutekaynak, url)
 
 			    if len(loginnormal) != len(brutekaynak):
 				self.ekle("LOGIN", url, "Brute Force User:"+gelenuser.strip(), url + "\nLogin Data=" + loginsaf, brutekaynak)
@@ -1927,7 +2426,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def form_starter(self,url,params,method,body):
 	#threading.Thread(target = scan_starter, args = (self,url,)).start()
-	dout.println("geldi3-form")	
 	
 	start_new_thread(self.tetikle,(url,params,method,body,))
 
@@ -2021,6 +2519,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    splitHeader2 = header.split(":", 2)
 			    headersm2 = {'Referer': splitHeader2[1].strip()}
 			    session.headers.update(headersm2)
+			elif header.startswith("User-Agent: "):
+			    splitHeader3 = header.split(":", 2)
+			    headersm3= {'User-Agent': splitHeader3[1].strip()}
+			    session.headers.update(headersm3)			
 		    
 		    
 				#session.headers['Cookie'] = splitHeader[1]
