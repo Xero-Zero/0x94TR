@@ -751,7 +751,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=request.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+			    bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"GET SSRF Injection",str(new_param), rawdata)
 				    
@@ -764,7 +764,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=request.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+			    bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"POST SSRF Injection",str(new_param), rawdata)
 
@@ -793,7 +793,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		cmdhal.clear()
 		data = dump.dump_all(urlac)
 		rawdata = data.decode('utf-8')
-		bakbak=request.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+		bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
 		
 		if anahtar in bakbak:
 		    self.ekle("GET",url,"URL SSRF Injection",cmdhal, rawdata)
@@ -1764,7 +1764,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    rawdata = data.decode('utf-8')
 		self.hatakontrol("POST", url, response, url)
 
-		bakbak=request.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+		bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
 		if anahtar in bakbak:
 		    self.ekle(method, url, "BLIND XXE Injection", url + "DATA" + inject_key+body, rawdata)
 
