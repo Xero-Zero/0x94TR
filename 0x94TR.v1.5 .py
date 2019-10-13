@@ -880,6 +880,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    b="daaf"
 
 
+
+   
+	    
     def indexoful(self,url):
 
 
@@ -1300,10 +1303,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    cmdhal.clear()   
 
 
-    def randomString(stringLength):
-	"""Generate a random string of fixed length """
-	letters = string.ascii_lowercase
-	return ''.join(random.choice(letters) for i in range(stringLength))
+   
     
     def sql(self,urlnormal):
 
@@ -2284,7 +2284,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		'  <!ENTITY xxekey "' + str(rastgelekaptan) + '">\n' + \
 	    ']>\n'+ \
 		     '<user><username>&xxekey;</username><password>asd0x94</password></user>\n'
-
+	
+	
 	for rakam in range(3):
 	    if rakam==1:
 		xmlraw=inject_key
@@ -2321,11 +2322,14 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		mesaj = "fff"
 
 
+    def randomString(stringLength):
+	"""Generate a random string of fixed length """
+	letters = string.ascii_lowercase
+	return ''.join(random.choice(letters) for i in range(stringLength))
 
     def scan_starter(self,url):
 
 	try:
-
 
 	    if "?" not in url:
 		self.brute_file(url)
@@ -2422,7 +2426,75 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 
 
+    def starter_xml(self,url,data):
+	
+	start_new_thread(self.xml_post_inj_response,(url,data,))
+	
+	
 
+    def xml_request(self,url,data,degis):
+	
+	headerim = {"Content-Type": "application/xml",
+	            "X-Requested-With":"XMLHttpRequest",
+	            "Referer":url}
+
+	
+	try:
+	    source = session.post(url, data,headers=headerim,verify=False)
+	    if "0x94Scanner@washere" in source.text or \
+	    "XMLMarshalException" in source.text or \
+	    "UnmarshalException" in source.text or \
+	    "SAPException" in source.text or\
+	    "not supported, only XML" in source.text:
+		
+		self.ekle("POST", url, "XXE Injection Parameter="+degis, data, source.text)
+	except:
+	    error="xxx"
+    
+    
+    
+    def xml_inject_replace_error(self,xmldata, valuesi,url,anadata,degis):
+	
+	
+	# xml_value=re.search("<"+degis+">(.*?)</"+degis+">",">0x94",data)
+	eskidata = valuesi
+	# yeni_data=xmldata.replace(valuesi,"0x94Scannere@washere")
+	yeni_data = anadata.replace(eskidata, "&doksandortwashere")
+	self.xml_request(url,anadata.replace(eskidata, "&doksandortwashere"),degis)
+	# print "Eski="+valuesi
+	#print "Yeni Data=" + yeni_data    
+    
+    def xml_inject_replace(self,xmldata, valuesi,url,anadata,degis):
+	
+	
+	# xml_value=re.search("<"+degis+">(.*?)</"+degis+">",">0x94",data)
+	eskidata = valuesi
+	# yeni_data=xmldata.replace(valuesi,"0x94Scannere@washere")
+	yeni_data = anadata.replace(eskidata, "0x94Scanner@washere")
+	self.xml_request(url,anadata.replace(eskidata, "0x94Scanner@washere"),degis)
+	# print "Eski="+valuesi
+	#print "Yeni Data=" + yeni_data
+
+    def xml_replace(self,parametre, data,url):
+	
+	
+	degis = parametre.replace("/", "")
+	# xml_value=re.search("<"+degis+">(.*?)</"+degis+">",">bekir",data)
+	xml_value = re.search("<" + degis + ">(.*?)</" + degis + ">", data)
+	if xml_value:
+	    self.xml_inject_replace("<" + degis + ">" + xml_value.group(1) + "</" + degis + ">", xml_value.group(1),url,data,degis)
+	    self.xml_inject_replace_error("<" + degis + ">" + xml_value.group(1) + "</" + degis + ">", xml_value.group(1),url,data,degis)
+	    
+
+
+    def xml_post_inj_response(self,url,data):
+	
+
+	bul_xml = re.findall("<(.*?)><(.*?)", data)
+	for slashli in bul_xml:
+	    if "/" in slashli[0]:
+		# print slashli[0]
+		self.xml_replace(slashli[0], data,url)	
 
     def form_starter(self,url,params,method,body):
 	#threading.Thread(target = scan_starter, args = (self,url,)).start()
@@ -2462,6 +2534,22 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			#dout.println(url.toString()+" - "+method)
 		    parametredata = {}
 		    url=self._helpers.analyzeRequest(messageInfo).getUrl()
+		    
+		    
+		    for header in request_header:
+			if header.startswith("Cookie: "):
+			    splitHeader = header.split(":", 2)
+			    headersm = {'Cookie': splitHeader[1].strip()}
+			    session.headers.update(headersm)
+			elif header.startswith("Referer: "):
+			    splitHeader2 = header.split(":", 2)
+			    headersm2 = {'Referer': splitHeader2[1].strip()}
+			    session.headers.update(headersm2)
+			elif header.startswith("User-Agent: "):
+			    splitHeader3 = header.split(":", 2)
+			    headersm3= {'User-Agent': splitHeader3[1].strip()}
+			    session.headers.update(headersm3)	
+			    
     
 		    if method == "POST" :
 			try:
@@ -2472,14 +2560,13 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    body = request[analyzedRequest.getBodyOffset():].tostring()
     
     
-			    #for header in request_header:
-				#if "Content-Type" in header:
-				    #if "xml" in header or "urlencoded" in header:
-    
-					#self.starter_xml(url.toString(),body)
-				#elif "Accept" in header:
-				    #if "*" in header or "xml" in header:
-					#self.starter_xml(url.toString(), body)
+			    for header in request_header:
+				if "Content-Type" in header:
+				    if "xml" in header or "urlencoded" in header:
+					self.starter_xml(url.toString(),body)
+				elif "Accept" in header:				    
+				    if "*" in header or "xml" in header:
+					self.starter_xml(url.toString(), body)
     
     
 			    if body!="":
@@ -2510,19 +2597,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			except:
 			    error="xxx"
 			    
-		    for header in request_header:
-			if header.startswith("Cookie: "):
-			    splitHeader = header.split(":", 2)
-			    headersm = {'Cookie': splitHeader[1].strip()}
-			    session.headers.update(headersm)
-			elif header.startswith("Referer: "):
-			    splitHeader2 = header.split(":", 2)
-			    headersm2 = {'Referer': splitHeader2[1].strip()}
-			    session.headers.update(headersm2)
-			elif header.startswith("User-Agent: "):
-			    splitHeader3 = header.split(":", 2)
-			    headersm3= {'User-Agent': splitHeader3[1].strip()}
-			    session.headers.update(headersm3)			
 		    
 		    
 				#session.headers['Cookie'] = splitHeader[1]
@@ -2530,9 +2604,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    
 				#self.table_add("XXX",url,"xx","xx","xxx")
 		    
-			if not taranan.has_key(url):			
-			    taranan[url] = "0x94"
-			    self.starter(url.toString())			
+		    if not taranan.has_key(url):			
+			taranan[url] = "0x94"
+			self.starter(url.toString())			
 
 
 
