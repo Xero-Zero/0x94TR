@@ -65,6 +65,8 @@ Done!<br>
 
 # Usage
 
+# Just browse the website!
+
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
 <br>
 
