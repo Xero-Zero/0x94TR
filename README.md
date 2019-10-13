@@ -1,4 +1,4 @@
-0x94TR Scanner Burp Suite Extension
+# 0x94TR Scanner Burp Suite Extension
 
 Operations occur on a direct query without any parameter target input..
 
@@ -41,13 +41,13 @@ What vulnerabilities can it find ?
 <li>Sef Url Xss </li>
 </ul>
 
-How does he find it ?
+# How does he find it ?
 
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
-<b><h4>
- Setup</h4><br>
+<b>
+# Setup
  
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
 <br>
@@ -65,6 +65,9 @@ Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
 
+<br>
+
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
 <br>
 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
