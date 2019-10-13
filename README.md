@@ -1,4 +1,4 @@
-0x94TR Scanner Burp Suite Extension
+# 0x94TR Scanner Burp Suite Extension
 
 Operations occur on a direct query without any parameter target input..
 
@@ -41,19 +41,13 @@ What vulnerabilities can it find ?
 <li>Sef Url Xss </li>
 </ul>
 
-How does he find it ?
+# How does he find it ?
 
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
-<b><h4>
- Setup</h4><br>
- 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
-<br>
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
-<br>
-<h4>Requirements:</h4><br>
+# Setup1 
+ <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
 Manual installation:<br>
 'Extender'->'Options'<br>
@@ -64,13 +58,30 @@ Click 'Add'<br>
 Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
+ 
+ # Setup2 
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
+<br>
+
+# Usage
+
+
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
+<br>
+
+# Just browse the website!
 
 <br>
+
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/xxe.png>
+<br>
+
+
 
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
 
  
 
-watch the video<br>
+# Watch the video<br>
 
 [![0x94TR Burp Suite Extension](http://img.youtube.com/vi/HWMUSTBVovk/0.jpg)](http://www.youtube.com/watch?v=HWMUSTBVovk "0x94TR Burp Suite Extension")
