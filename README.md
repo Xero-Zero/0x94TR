@@ -28,6 +28,7 @@ What vulnerabilities can it find ?
 <li>GET-POST Template Injection </li>
 <li>GET-POST SSRF Injection </li>
 <li>GET-POST XXE Injection </li>
+<li>GET-POST Code Injection </li>
 <li>HTTP Response Splitting</li>
 <li>Blind Command Injection</li>
 <li>Blind Remote Command Injection</li>
@@ -39,6 +40,8 @@ What vulnerabilities can it find ?
 <li>File Brute</li>
 <li>Default password Brute</li>
 <li>Sef Url Xss </li>
+<li>GET-POST Sensitive Params Information </li>
+
 </ul>
 
 # How does he find it ?
@@ -46,6 +49,7 @@ What vulnerabilities can it find ?
 It automatically detects GET or POST requests,
 by browsing the target site and tries payload based on returning errors.
 <br>
+
 # Setup1 
  <h4>Requirements:</h4><br>
 Burp Suite Professional, 2.7.0 standalone: http://www.jython.org/downloads.html<br>
@@ -59,26 +63,29 @@ Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
  
- # Setup2 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/install.png>
+# Setup2
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/setup2.png>
+<br>
+ 
+# Setup3
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/setup3.png>
 <br>
 
 # Usage
 
-
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/scope.jpg>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/scope.jpg>
 <br>
 
 # Just browse the website!
 
 <br>
 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/xxe.png>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/xxe.png>
 <br>
 
 
 
-<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/www.png>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/www.png>
 
  
 
