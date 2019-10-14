@@ -70,6 +70,7 @@ Done!<br>
 <br>
  
 # Setup3
+<h4>select Add-in folder</h4>
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/setup3.png>
 <br>
 
