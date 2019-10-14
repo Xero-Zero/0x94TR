@@ -62,6 +62,8 @@ Click 'Add'<br>
 Change 'Extension Type' to Python<br>
 Choose 0x94TR.py<br>
 Done!<br>
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/setup1.png>
+ 
  
 # Setup2
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/setup2.png>
