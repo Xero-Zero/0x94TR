@@ -50,7 +50,7 @@ from requests_toolbelt.utils import dump
 import os
 import sys
 from burp import ITextEditor
-
+import string
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
