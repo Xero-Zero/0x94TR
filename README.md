@@ -81,16 +81,12 @@ Done!<br>
 
 # Just browse the website!
 
-<br>
-
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/xxe.png>
 <br>
-
-
-
+<img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/ssrf.png>
+<br>
 <img src=https://raw.githubusercontent.com/antichown/0x94TR/master/images/www.png>
 
- 
 
 # Watch the video<br>
 
