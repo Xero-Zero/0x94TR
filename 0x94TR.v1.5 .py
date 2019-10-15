@@ -139,7 +139,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 
    
+    def page404(self,url):
     
+	sonucum = ""
+	try:
+	    urlac = session.get(url + "/0x94scannerrrrr.php")
+	    response = urlac.text
+	    sonucum = response
+	except:
+	    err="eerr"
+    
+	return sonucum    
 
     def brute_file(self,url):
 	protocol = urlparse.urlparse(url).scheme + "://"
@@ -152,22 +162,20 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    elif url.count("/") == 5:
 		dizin = protocol + url.rsplit("/")[2] + "/" + url.rsplit("/")[3] + "/" + url.rsplit("/")[4] + "/"
 	    elif url.count("/") == 6:
-		dizin = protocol + url.rsplit("/")[2] + "/" + url.rsplit("/")[3] + "/" + url.rsplit("/")[4] + "/" + \
-				    url.rsplit("/")[5] + "/"
+		dizin = protocol + url.rsplit("/")[2] + "/" + url.rsplit("/")[3] + "/" + url.rsplit("/")[4] + "/" + url.rsplit("/")[5] + "/"
 
-	
-
+    
 	source404=self.page404(dizin)
 
 	for xx in open("dict/files.txt").readlines():
 	    try:
-		urlac = session.get(dizin + xx)
+		urlac = session.get(dizin + xx.strip())
 		response = urlac.text
 		data = dump.dump_all(urlac)
 		rawdata = data.decode('utf-8')
-		if urlac.status_code == 200 or urlac.status_code == 300 or urlac.status_code == 500:
+		if urlac.status_code == 200 or urlac.status_code == 403 or urlac.status_code == 500:
 		    if len(source404)!=len(response):
-			self.ekle("GET", dizin + xx, xx + " Brute File", dizin + xx, rawdata)
+			self.ekle("GET", dizin + xx.strip(), xx.strip() + " Brute File - Code="+str(urlac.status_code), dizin + xx.strip(), rawdata)
 	    except:
 		mesaj = "error"
 
