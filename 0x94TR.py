@@ -870,21 +870,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	for lfidizin in lfiyollar:
 	    try:
 
-		lfilihal={}
-
 
 		for key,value in parse_qs(urlparse.urlparse(lfibul).query, True).items():
-		    lfilihal[key]=lfidizin
-		    
 		    newurl=lfibul.replace(value[0],lfidizin)
 		    
 		    try:
-			r =session.get(newurl)
-			response=r.text
+			rx =session.get(newurl)
+			response=rx.text
 			if "0x9411111" in response or "0x94Scanner1111" in response:
-			    data = dump.dump_all(r)
-			    rawdata=data.decode('utf-8')
-			    self.ekle("GET", lfibul, "Local File Include Base64",protocol + host + dosya + "?" + str(lfilihal), rawdata)
+			    self.ekle("GET",lfibul, "Local File Include Base64",newurl, response)
+			    #self.ekle("GET",lfiurl,"Local File Include",urlnormal, rawdata)
+			    
 		    except:
 			err="err"
 
@@ -1122,7 +1118,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=requests.get("http://0x94tr.atwebpages.com/0x94.txt").text
+			    bakbak=requests.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"GET SSRF Injection",str(new_param), rawdata)
 				    
@@ -1135,7 +1131,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    postgetdict=params.copy()
 			    data = dump.dump_all(y11)
 			    rawdata = data.decode('utf-8')
-			    bakbak=requests.get("http://0x94tr.atwebpages.com/0x94.txt").text
+			    bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
 			    if anahtar in bakbak:	
 				self.ekle(method,url,"POST SSRF Injection",str(new_param), rawdata)
 
@@ -1166,7 +1162,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    cmdhal.clear()
 		    data = dump.dump_all(urlac)
 		    rawdata = data.decode('utf-8')
-		    bakbak=requests.get("http://0x94tr.atwebpages.com/0x94.txt").text
+		    bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
 		    
 		    if anahtar in bakbak:
 			self.ekle("GET",url,"URL SSRF Injection",newurl, rawdata)
@@ -2195,7 +2191,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    rawdata = data.decode('utf-8')
 		self.hatakontrol("POST", url, response, url)
 
-		bakbak=requests.get("http://0x94tr.atwebpages.com/0x94.txt").text
+		bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
 		if anahtar in bakbak:
 		    self.ekle(method, url, "BLIND XXE Injection", url + "DATA" + inject_key+body, rawdata)
 
