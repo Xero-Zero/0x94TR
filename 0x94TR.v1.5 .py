@@ -1253,7 +1253,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 					
 		if len(response1) != len(response2): 
 		    dout.println("blind oldu")
-		    self.ekle("GET", urlblind, "Blind SQL Injection True="+true_strings[i], " \nTrue=" + true_strings[i] + " | FALSE=" + false_strings[i], response1)
+		    self.ekle("GET", urlblind, " Possible Blind SQL Injection True="+true_strings[i], " \nTrue=" + true_strings[i] + " | FALSE=" + false_strings[i], response1)
 		    
 		i += 1
 	except:
@@ -2116,7 +2116,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 				brutekaynak = requests.post(url, dictlogin).text
 	
 				
-			    dout.println(str(len(loginnormal))+" - "+str(len(brutekaynak))+" Data= "+gelenuser.strip()+" - "+gelenpass.strip())
 			    if len(loginnormal) != len(brutekaynak):
 				self.ekle(method, url, "Brute Force User:"+gelenuser.strip(), url + "\nDATA=" + str(dictlogin), brutekaynak)
 			    dictlogin.clear()
@@ -2131,6 +2130,8 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
 
     def xxe_error_injection(self, url, params, method,body):
+	response="none"
+	
 	payload=["[{}]",'<?xml version="1.0" encoding="utf-8"?>','<?xml version="abc949999" ?><Doc/>']
 	for pay in payload:
 	    try:
