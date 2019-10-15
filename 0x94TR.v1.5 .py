@@ -1252,7 +1252,6 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 			mesaj = "entry"		    
 					
 		if len(response1) != len(response2): 
-		    dout.println("blind oldu")
 		    self.ekle("GET", urlblind, " Possible Blind SQL Injection True="+true_strings[i], " \nTrue=" + true_strings[i] + " | FALSE=" + false_strings[i], response1)
 		    
 		i += 1
